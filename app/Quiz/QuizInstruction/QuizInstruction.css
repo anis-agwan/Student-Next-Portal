@@ -1,0 +1,35 @@
+.titleText {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 300%;
+  line-height: 48px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #151515;
+}
+
+.instructionText {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 35px;
+  text-align: center;
+
+  color: #000000;
+}
+
+.StartQuizButton11 {
+  position: absolute;
+  width: 85px;
+  height: 85px;
+  left: 47%;
+  top: 80%;
+  align-items: center;
+  background: #22856a;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 50px;
+}

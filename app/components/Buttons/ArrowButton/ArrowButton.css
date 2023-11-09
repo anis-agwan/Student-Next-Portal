@@ -1,0 +1,23 @@
+.startBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 80px; /* Set the width and height to control the size of the circle */
+  height: 80px;
+  align-self: center;
+  border-radius: 50%;
+  background: #22856a;
+}
+
+.startTxt {
+  width: 40%;
+  height: 40%;
+  margin-right: -10px;
+  background: #ffffff00;
+  border-radius: 0px;
+  border-color: #22856b00;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid #ffffff;
+}

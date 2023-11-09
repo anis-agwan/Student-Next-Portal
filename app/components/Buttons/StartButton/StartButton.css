@@ -1,0 +1,24 @@
+.StartQuizButton {
+  background: #005941;
+  border-radius: 66px;
+}
+
+.StartQuizText {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 125%;
+  background-color: #00594100;
+  border-color: #ffffff00;
+  color: #ffffff;
+}
+
+.StartQuizText:visited {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.StartQuizText:hover {
+  text-decoration: none;
+  color: #ffffff;
+}
