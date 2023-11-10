@@ -1,0 +1,46 @@
+.headingTitle {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: min(2.5rem, 42px, 4vw);
+}
+
+.headText {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: min(1.5rem, 36px, 2vw);
+  line-height: min(24px, 4rem, 2vw);
+  letter-spacing: 0.065em;
+}
+
+.labelHeader {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: min(2.7vw, 2rem);
+}
+
+.formInputDiv {
+  box-sizing: border-box;
+  position: relative;
+  height: min(5vw, 4rem);
+
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: min(0.85vw, 2rem);
+
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: min(1.5rem, 36px, 2vw);
+
+  letter-spacing: 0.065em;
+}
+
+.authChangeBtn {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: min(1.3rem, 2vw); /* Set your desired font size */
+}

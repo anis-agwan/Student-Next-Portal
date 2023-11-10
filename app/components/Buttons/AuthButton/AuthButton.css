@@ -1,0 +1,21 @@
+.authButtonDiv {
+  box-sizing: border-box;
+
+  position: relative;
+
+  height: min(5vw, 4rem);
+
+  border-radius: 0.85vw;
+}
+
+.authButtonDiv:hover {
+  background-color: #014a36;
+}
+
+.authButton {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: min(3vw, 2.5rem);
+  letter-spacing: 0.065em;
+}
