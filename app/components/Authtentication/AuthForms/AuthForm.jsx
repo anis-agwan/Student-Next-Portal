@@ -7,11 +7,12 @@ import { Signup } from "./Signup";
 import { ForgotPassword } from "./ForgotPassword";
 import { NewPassForm } from "./NewPassForm";
 import { AUTHSTATE } from "@/app/enums/auth_state";
+import { SignUpToken } from "./SignUpToken";
 
 export const AuthForm = () => {
-  const [authState, setAuthState] = useState(AUTHSTATE.LOGIN);
   const [isLoginState, setLoginState] = useState(true);
   const [isSignUpState, setSignUpState] = useState(false);
+  const [isTokenState, setTokenState] = useState(false);
   const [isForgotState, setForgotState] = useState(false);
   const [isNewPassState, setNewPassState] = useState(false);
 
@@ -19,24 +20,35 @@ export const AuthForm = () => {
     if (newState === AUTHSTATE.LOGIN) {
       setLoginState(true);
       setSignUpState(false);
+      setTokenState(false);
       setForgotState(false);
       setNewPassState(false);
       return;
     } else if (newState === AUTHSTATE.SIGNUP) {
       setLoginState(false);
       setSignUpState(true);
+      setTokenState(false);
+      setForgotState(false);
+      setNewPassState(false);
+      return;
+    } else if (newState === AUTHSTATE.TOKENSIGNUP) {
+      setLoginState(false);
+      setSignUpState(false);
+      setTokenState(true);
       setForgotState(false);
       setNewPassState(false);
       return;
     } else if (newState === AUTHSTATE.FORGOT) {
       setLoginState(false);
       setSignUpState(false);
+      setTokenState(false);
       setForgotState(true);
       setNewPassState(false);
       return;
     } else if (newState === AUTHSTATE.NEWPASS) {
       setLoginState(false);
       setSignUpState(false);
+      setTokenState(false);
       setForgotState(false);
       setNewPassState(true);
       return;
@@ -55,6 +67,7 @@ export const AuthForm = () => {
         <h1 className="headingTitle text-binghamton-green">
           {isLoginState && "Login"}
           {isSignUpState && "Sign Up"}
+          {isTokenState && "Verify Token"}
           {isForgotState && "Forgot Password"}
           {isNewPassState && "New Password"}
         </h1>
@@ -63,6 +76,7 @@ export const AuthForm = () => {
         </p>
         {isLoginState && <Login handleState={handleState} />}
         {isSignUpState && <Signup handleState={handleState} />}
+        {isTokenState && <SignUpToken handleState={handleState} />}
         {isForgotState && <ForgotPassword handleState={handleState} />}
         {isNewPassState && <NewPassForm handleState={handleState} />}
       </div>
