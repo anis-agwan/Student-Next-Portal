@@ -62,7 +62,7 @@ export const AuthForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-full justify-center pt-12">
+    <div className="flex flex-col items-center h-full justify-center pt-14">
       <div className="flex flex-col items-start w-full px-6 gap-4">
         <h1 className="headingTitle text-binghamton-green">
           {isLoginState && "Login"}

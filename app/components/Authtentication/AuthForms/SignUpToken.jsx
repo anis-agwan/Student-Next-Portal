@@ -6,6 +6,7 @@ import { AuthContext } from "@/app/store/auth-context";
 
 import { tokenReducer } from "./AuthReducers";
 import { USER_ROLE } from "@/app/enums/role_enums";
+import { TOKEN_ENUMS } from "@/app/enums/token_enums";
 
 export const SignUpToken = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
@@ -48,17 +49,28 @@ export const SignUpToken = ({ handleState }) => {
     if (tokenFormIsValid) {
       console.log(studentData);
       authCtx
-        .onSignup(
+        .onTokenSubmit(
           studentData.emailId,
-          studentData.bingNumber,
-          studentData.firstName,
-          studentData.lastName,
-          studentData.password,
-          USER_ROLE.STUDENT
+          tokenState.value,
+          TOKEN_ENUMS.REGISTER
         )
         .then((res) => {
-          alert("Successfully registered");
-          handleState(AUTHSTATE.LOGIN);
+          console.log(res);
+          if (res) {
+            authCtx
+              .onSignup(
+                studentData.emailId,
+                studentData.bingNumber,
+                studentData.firstName,
+                studentData.lastName,
+                studentData.password,
+                USER_ROLE.STUDENT
+              )
+              .then((res) => {
+                alert("Successfully registered");
+                handleState(AUTHSTATE.LOGIN);
+              });
+          }
         });
     }
   };
@@ -72,7 +84,7 @@ export const SignUpToken = ({ handleState }) => {
         <div className="formInputDiv flex items-center">
           <input
             type={"text"}
-            className="text-black px-2"
+            className="text-black px-2 w-full"
             placeholder="*************"
             required
             // pattern="^[a-zA-Z0-9]+@binghamton\.edu$"

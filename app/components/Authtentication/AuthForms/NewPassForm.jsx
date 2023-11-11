@@ -1,12 +1,66 @@
-import React from "react";
+import React, { useEffect, useReducer, useState, useContext } from "react";
 
 import "./Login.css";
 import { AuthButton } from "../../Buttons/AuthButton/AuthButton";
+import { passwordReducer } from "./AuthReducers";
+import { AuthContext } from "@/app/store/auth-context";
 
 export const NewPassForm = () => {
+  const authCtx = useContext(AuthContext);
+
+  console.log(authCtx.signUpStudentData);
+
+  const [newpassFormIsValid, setNewPassFormIsValid] = useState(false);
+
+  const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+    value: "",
+    isValid: null,
+  });
+
+  const { value: enteredPassword, isValid: isPassValid } = passwordState;
+  const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
+
+  const passwordChangehandler = (event) => {
+    dispatchPassword({
+      type: "USER_INPUT",
+      val: event.target.value,
+    });
+  };
+
+  const confirmPasswordHandler = (event) => {
+    setEnteredConfirmPassword(event.target.value);
+  };
+
+  const validatePassword = () => {
+    dispatchPassword({ type: "INPUT_BLUR" });
+  };
+
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      if (isPassValid && enteredPassword === enteredConfirmPassword) {
+        setNewPassFormIsValid(isPassValid);
+        if (newpassFormIsValid) {
+          console.log("New pass FORM OK");
+        }
+      } else {
+        console.log("new pass FORM NOT OK");
+      }
+    }, 500);
+
+    return () => {
+      console.log("cleanup");
+      clearTimeout(identifier);
+    };
+  }, [[isPassValid, enteredPassword, enteredConfirmPassword]]);
+
+  const onNewPassSubmit = (event) => {
+    event.preventDefault();
+    authCtx.onNewPassSubmit();
+  };
+
   return (
     <div className="w-full h-1/2">
-      <form className="w-full flex flex-col gap-1">
+      <form className="w-full flex flex-col gap-1" onSubmit={onNewPassSubmit}>
         <label htmlFor="password" className="namesLabel text-auth-grey">
           Password
         </label>
@@ -17,8 +71,8 @@ export const NewPassForm = () => {
             placeholder="*************"
             required
             // pattern="^[a-zA-Z0-9]+@binghamton\.edu$"
-            // onChange={userNameChangeHandler}
-            // onBlur={validateUserNameHandler}
+            onChange={passwordChangehandler}
+            onBlur={validatePassword}
           />
         </div>
         <label htmlFor="password" className="namesLabel text-auth-grey">
@@ -31,8 +85,8 @@ export const NewPassForm = () => {
             placeholder="*************"
             required
             // pattern="^[a-zA-Z0-9]+@binghamton\.edu$"
-            // onChange={userNameChangeHandler}
-            // onBlur={validateUserNameHandler}
+            onChange={confirmPasswordHandler}
+            onBlur={validatePassword}
           />
         </div>
         <div className="flex justify-center mt-5">

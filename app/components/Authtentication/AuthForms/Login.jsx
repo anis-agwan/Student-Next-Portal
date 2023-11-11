@@ -78,19 +78,23 @@ export const Login = ({ handleState }) => {
     dispatchPassword({ type: "INPUT_BLUR" });
   };
 
-  const onLoginSubmit = (event) => {
+  const onLoginSubmit = async (event) => {
     event.preventDefault();
     let success = false;
     console.log("CLICK");
     if (formIsValid) {
-      authCtx.onLogin(userNameState.value, passwordState.value).then((res) => {
-        console.log(res);
-        if (res) {
-          router.push("/SelectionScreen");
-        } else {
-          console.log("SOME ISSUE");
-        }
-      });
+      await authCtx
+        .onLogin(userNameState.value, passwordState.value)
+        .then((res) => {
+          // console.log(res);
+          if (res) {
+            authCtx.onSetLogin();
+            console.log(authCtx.isLoggedIn);
+            router.push("/SelectionScreen");
+          } else {
+            console.log("SOME ISSUE");
+          }
+        });
     } else {
       alert(
         "Please check your email and password.\n(Email should only be BU email)"

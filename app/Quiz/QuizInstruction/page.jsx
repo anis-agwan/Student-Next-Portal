@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useContext } from "react";
 import { instructionsData } from "./InstructionsData";
 import "./QuizInstruction.css";
 import { StartButton } from "@/app/components/Buttons/StartButton/StartButton";
@@ -6,6 +7,7 @@ import Link from "next/link";
 import { SECTION } from "@/app/enums/section_enums";
 import { SECTIONTYPE } from "@/app/enums/section_type";
 import { ArrowButton } from "@/app/components/Buttons/ArrowButton/ArrowButton";
+import { AuthContext } from "@/app/store/auth-context";
 
 const getInstData = (sectionName, type) => {
   if (sectionName === SECTION.PB) {
@@ -22,6 +24,10 @@ const getInstData = (sectionName, type) => {
 export default function QuizInstruction({ searchParams }) {
   const section = searchParams.section;
   const type = searchParams.type;
+
+  const authCtx = useContext(AuthContext);
+
+  console.log(authCtx.isLoggedIn);
 
   const data = getInstData(section, type);
   // console.log(data);

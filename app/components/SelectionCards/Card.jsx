@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { SECTION } from "../../enums/section_enums";
 import Image from "next/image";
 import juicy_multitasking from "./juicy-multitasking.gif";
@@ -8,6 +8,7 @@ import "./Card.css";
 import Link from "next/link";
 import { ArrowButton } from "../Buttons/ArrowButton/ArrowButton";
 import { SECTIONTYPE } from "@/app/enums/section_type";
+import { AuthContext } from "@/app/store/auth-context";
 
 export const Card = ({ section }) => {
   return (

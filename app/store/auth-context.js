@@ -8,10 +8,11 @@ export const AuthContext = createContext({
   isLoggedIn: false,
   onLogout: () => {},
   onLogin: (userName, password) => {},
+  onSetLogin: () => {},
   onSignup: (userName, password, fName, lName) => {},
   onGenerateToken: (email, access) => {},
-  //   onTokenSubmit: (email, token) => {},
-  //   onRegisterNewPassword: (email, newPass) => {},
+  onTokenSubmit: (email, token) => {},
+  onRegisterNewPassword: (email, newPass) => {},
   //   onUpdateStats: (email, section) => {},
   signUpStudentData: {},
   passStudentData: (student) => {},
@@ -81,7 +82,16 @@ export const AuthContextProvider = ({ children }) => {
       islog = false;
     }
 
+    if (islog) {
+      console.log(islog);
+      setLoggedIn(true);
+    }
+
     return islog;
+  };
+
+  const isLoginHandler = async () => {
+    setLoggedIn(true);
   };
 
   const signUpHandler = async (
@@ -174,21 +184,135 @@ export const AuthContextProvider = ({ children }) => {
       });
       console.log(res);
 
-      res.text().then((body) => {
-        console.log(body);
-        if (body === "No Such email found" || body === "User already exists") {
-          throw new Error(body);
-        } else {
-          // console.log(res.data);
-          token = body;
-        }
-      });
+      await res
+        .text()
+        .then((body) => {
+          console.log(body);
+          if (
+            body === "No Such email found" ||
+            body === "User already exists"
+          ) {
+            throw new Error(body);
+          } else {
+            // console.log(res.data);
+            token = body;
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
     } catch (err) {
       console.log(err);
       alert(err);
     }
 
     return token;
+  };
+
+  const tokenSubmitHandler = async (email, token, access) => {
+    // const url = `${baseURL}login/confirmtoken`;
+    let url = "";
+    if (access === TOKEN_ENUMS.REGISTER) {
+      url = `${baseURL}register/confirmtoken`;
+    } else if (access === TOKEN_ENUMS.FORGOT) {
+      url = `${baseURL}login/confirmtoken`;
+    } else {
+      url = `${baseURL}login/confirmtoken`;
+    }
+
+    const user = {
+      email: email,
+      token: token,
+    };
+
+    let tokenAuthValid = false;
+
+    console.log(url);
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = res.json();
+
+      await data
+        .then((resp) => {
+          if (resp.isValid) {
+            tokenAuthValid = resp.isValid;
+
+            return tokenAuthValid;
+          } else {
+            throw new Error(resp.message);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } catch (err) {
+      console.log(err);
+      alert(err);
+    }
+
+    return tokenAuthValid;
+  };
+
+  const registerNewPassword = async (email, password) => {
+    const url = `${baseURL}login/newPassword`;
+    const user = {
+      email: email,
+      newPassword: password,
+    };
+
+    let registeredValid = false;
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res);
+      const data = res.json();
+
+      //   await data
+      //     .then((resp) => {
+      //       if (resp.isValid) {
+      //         console.log(resp);
+      //         tokenAuthValid = resp.isValid;
+
+      //         console.log(tokenAuthValid);
+      //         return tokenAuthValid;
+      //       } else {
+      //         throw new Error(resp.message);
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       alert(err);
+      //     });
+    } catch (err) {
+      console.log(err);
+      alert(err);
+    }
+
+    // await axios
+    //   .post(url, user)
+    //   .then((res) => {
+    //     if (res.data.isValid && res.data.status === 200) {
+    //       // navigate("/");
+    //       registeredValid = res.data.isValid;
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    return registeredValid;
   };
 
   const studentDataHandler = (student) => {
@@ -202,8 +326,11 @@ export const AuthContextProvider = ({ children }) => {
         isLoggedIn: isLoggedIn,
         onLogout: logoutHandler,
         onLogin: loginHandler,
+        onSetLogin: isLoginHandler,
         onSignup: signUpHandler,
         onGenerateToken: generateTokenHandler,
+        onTokenSubmit: tokenSubmitHandler,
+        onRegisterNewPassword: registerNewPassword,
         signUpStudentData: signUpStuData,
         passStudentData: studentDataHandler,
       }}

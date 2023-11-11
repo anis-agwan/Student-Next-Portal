@@ -171,7 +171,7 @@ export const Signup = ({ handleState, passStudentInfo }) => {
     // console.log(`FORM: ${formIsValid}`);
   };
 
-  const onSignUpSubmit = (event) => {
+  const onSignUpSubmit = async (event) => {
     event.preventDefault();
 
     const user = {
@@ -184,9 +184,13 @@ export const Signup = ({ handleState, passStudentInfo }) => {
 
     if (formIsValid) {
       authCtx.passStudentData(user);
-      authCtx.onGenerateToken(userNameState.value, TOKEN_ENUMS.REGISTER);
+      await authCtx
+        .onGenerateToken(userNameState.value, TOKEN_ENUMS.REGISTER)
+        .then(() => {
+          alert("A temporary Token has been sent to your BU email address.");
+        });
 
-      handleState(AUTHSTATE.TOKENSIGNUP);
+      await handleState(AUTHSTATE.TOKENSIGNUP);
     }
   };
 
@@ -227,13 +231,11 @@ export const Signup = ({ handleState, passStudentInfo }) => {
             </div>
           </div>
         </div>
-        <label htmlFor="email" className="namesLabel text-auth-grey">
-          B-Number
-        </label>
+        <label className="namesLabel text-auth-grey">B-Number</label>
         <div className="namesFormInputDiv flex items-center">
           <input
             type={"text"}
-            className="text-black px-2"
+            className="text-black px-2 w-full"
             placeholder="B#"
             required
             // pattern="^[a-zA-Z0-9]+@binghamton\.edu$"
@@ -247,7 +249,7 @@ export const Signup = ({ handleState, passStudentInfo }) => {
         <div className="namesFormInputDiv flex items-center">
           <input
             type={"email"}
-            className="text-black px-2"
+            className="text-black px-2 w-full"
             placeholder="xyz@binghamton.edu"
             id="email"
             name="email"
@@ -263,7 +265,7 @@ export const Signup = ({ handleState, passStudentInfo }) => {
         <div className="namesFormInputDiv flex items-center">
           <input
             type={"password"}
-            className="text-black px-2"
+            className="text-black px-2 w-full"
             placeholder="*************"
             id="password"
             name="password"
@@ -279,7 +281,7 @@ export const Signup = ({ handleState, passStudentInfo }) => {
         <div className="namesFormInputDiv flex items-center">
           <input
             type={"password"}
-            className="text-black px-2"
+            className="text-black px-2 w-full"
             placeholder="*************"
             required
             // pattern="^[a-zA-Z0-9]+@binghamton\.edu$"
