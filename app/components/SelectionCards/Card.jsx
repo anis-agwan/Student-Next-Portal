@@ -12,7 +12,7 @@ import { AuthContext } from "@/app/store/auth-context";
 
 export const Card = ({ section }) => {
   return (
-    <div className="flex justify-center items-center p-7 p-5">
+    <div className="flex justify-center p-7 p-5">
       <div className="card">
         {section === SECTION.PB && (
           <Image src={juicy_multitasking} alt="PB" className="cardImg" />
@@ -23,7 +23,7 @@ export const Card = ({ section }) => {
         {section === SECTION.DD && (
           <Image src={juicy_business} alt="DD" className="cardImg" />
         )}
-        <div>
+        <div className="flex flex-col items-center">
           {section === SECTION.PB && (
             <h1 className="title">Personal Beliefs</h1>
           )}

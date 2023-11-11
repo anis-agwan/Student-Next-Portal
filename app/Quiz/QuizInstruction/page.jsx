@@ -60,8 +60,8 @@ export default function QuizInstruction({ searchParams }) {
           <ArrowButton />
         </Link>
       ) : (
-        <Link href="">
-          <StartButton />
+        <Link href="/Quiz/Questions">
+          <StartButton buttonText={"Start Quiz"} />
         </Link>
       )}
     </div>
