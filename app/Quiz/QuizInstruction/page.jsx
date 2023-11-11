@@ -33,7 +33,7 @@ export default function QuizInstruction({ searchParams }) {
   // console.log(data);
 
   return (
-    <div className=" flex flex-col justify-evenly	items-center bg-gray-800 h-screen pt-20 px-10 pb-5">
+    <div className=" flex flex-col justify-evenly	items-center h-screen pt-20 px-10 pb-5">
       <h1 className="titleText flex">INSTRUCTIONS</h1>
 
       <div>

@@ -4,7 +4,7 @@ import { SECTION } from "../enums/section_enums";
 
 export default function SelectionScreen() {
   return (
-    <div className=" flex justify-evenly	items-center bg-gray-800 h-screen">
+    <div className=" flex justify-evenly	items-center h-screen">
       <div>
         <Card section={SECTION.PB} />
       </div>
