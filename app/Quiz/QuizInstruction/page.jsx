@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { instructionsData } from "./InstructionsData";
 import "./QuizInstruction.css";
 import { StartButton } from "@/app/components/Buttons/StartButton/StartButton";
@@ -8,6 +8,7 @@ import { SECTION } from "@/app/enums/section_enums";
 import { SECTIONTYPE } from "@/app/enums/section_type";
 import { ArrowButton } from "@/app/components/Buttons/ArrowButton/ArrowButton";
 import { AuthContext } from "@/app/store/auth-context";
+import { QuestionContext } from "@/app/store/questions-context";
 
 const getInstData = (sectionName, type) => {
   if (sectionName === SECTION.PB) {
@@ -26,11 +27,41 @@ export default function QuizInstruction({ searchParams }) {
   const type = searchParams.type;
 
   const authCtx = useContext(AuthContext);
+  const questionCtx = useContext(QuestionContext);
 
-  console.log(authCtx.isLoggedIn);
+  const [questions, setQuestions] = useState();
 
   const data = getInstData(section, type);
   // console.log(data);
+
+  const getQuestionsData = async (sectionName) => {
+    console.log("RUNNING");
+    if (sectionName === SECTION.PB) {
+      console.log(questionCtx.pbQuestions);
+      if (questionCtx.pbQuestions === null) {
+        // setLoadingData(true);
+        try {
+          let data = {};
+          await questionCtx.getPBQuestion().then((res) => {
+            data = res;
+          });
+
+          console.log(data);
+
+          questionCtx.setPBData(data);
+          questionCtx.createPBQStatus(Object.keys(data).length);
+
+          setQuestions(data);
+        } catch (err) {}
+      }
+    } else if (sectionName === SECTION.CT) {
+    } else if (sectionName === SECTION.DD) {
+    }
+  };
+
+  useEffect(() => {
+    getQuestionsData(section);
+  }, []);
 
   return (
     <div className=" flex flex-col justify-evenly	items-center h-screen pt-20 px-10 pb-5">
@@ -60,7 +91,14 @@ export default function QuizInstruction({ searchParams }) {
           <ArrowButton />
         </Link>
       ) : (
-        <Link href="/Quiz/Questions">
+        <Link
+          href={{
+            pathname: "/Quiz/Questions",
+            query: {
+              section: SECTION.PB,
+            },
+          }}
+        >
           <StartButton buttonText={"Start Quiz"} />
         </Link>
       )}

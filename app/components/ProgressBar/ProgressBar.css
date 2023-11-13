@@ -1,0 +1,6 @@
+.progressBarContainer {
+  width: 100%;
+  background-color: #e0e0de;
+  border-radius: 50px;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}

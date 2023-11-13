@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./components/Navbar/Navbar";
 import { AuthContextProvider } from "./store/auth-context";
+import { QuestionContextProvider } from "./store/questions-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true} className={inter.className}>
         <AuthContextProvider>
           <Navbar />
-          {children}
+          <QuestionContextProvider>{children}</QuestionContextProvider>
         </AuthContextProvider>
       </body>
     </html>

@@ -1,0 +1,16 @@
+.questionNumber {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  color: #414040;
+  opacity: 0.8;
+}
+
+.questionDesc {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  color: #414040;
+}
