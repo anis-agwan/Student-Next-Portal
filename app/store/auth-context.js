@@ -13,7 +13,7 @@ export const AuthContext = createContext({
   onGenerateToken: (email, access) => {},
   onTokenSubmit: (email, token) => {},
   onRegisterNewPassword: (email, newPass) => {},
-  //   onUpdateStats: (email, section) => {},
+  onUpdateStats: (email, section) => {},
   signUpStudentData: {},
   passStudentData: (student) => {},
 });
@@ -279,22 +279,6 @@ export const AuthContextProvider = ({ children }) => {
       });
       console.log(res);
       const data = res.json();
-
-      //   await data
-      //     .then((resp) => {
-      //       if (resp.isValid) {
-      //         console.log(resp);
-      //         tokenAuthValid = resp.isValid;
-
-      //         console.log(tokenAuthValid);
-      //         return tokenAuthValid;
-      //       } else {
-      //         throw new Error(resp.message);
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       alert(err);
-      //     });
     } catch (err) {
       console.log(err);
       alert(err);
@@ -315,6 +299,31 @@ export const AuthContextProvider = ({ children }) => {
     return registeredValid;
   };
 
+  const updateStats = async (section) => {
+    const url = `${baseURL}login/updatestats`;
+
+    const userID = JSON.parse(localStorage.getItem("userDetails"));
+    const emailId = userID.emailId;
+
+    const user = {
+      email: emailId,
+      section: section,
+    };
+
+    try {
+      const res = fetch(url, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const studentDataHandler = (student) => {
     console.log(student);
     setSignUpStudentData(student);
@@ -331,6 +340,7 @@ export const AuthContextProvider = ({ children }) => {
         onGenerateToken: generateTokenHandler,
         onTokenSubmit: tokenSubmitHandler,
         onRegisterNewPassword: registerNewPassword,
+        onUpdateStats: updateStats,
         signUpStudentData: signUpStuData,
         passStudentData: studentDataHandler,
       }}

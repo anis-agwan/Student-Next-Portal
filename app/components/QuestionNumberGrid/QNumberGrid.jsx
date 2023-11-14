@@ -1,14 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./QNumberGrid.css";
 import { AuthButton } from "../Buttons/AuthButton/AuthButton";
 import { StartButton } from "../Buttons/StartButton/StartButton";
 import { QuestionContext } from "@/app/store/questions-context";
+import { AuthContext } from "@/app/store/auth-context";
 
-export const QNumberGrid = ({ noOfQuestions, whichQues }) => {
+export const QNumberGrid = ({
+  noOfQuestions,
+  whichQues,
+  isSubmitBtnDisabled,
+  section,
+}) => {
   const questionCtx = useContext(QuestionContext);
+  const authCtx = useContext(AuthContext);
   const questionStatus = questionCtx.pbQuestionStatus;
 
-  console.log(questionStatus);
+  // console.log(section);
+
+  const submitAnswers = () => {
+    authCtx.onUpdateStats(section);
+    questionCtx.submitPBAnswers();
+  };
 
   return (
     <div className="boxContainer overflow-auto gap-3 p-5">
@@ -41,8 +53,11 @@ export const QNumberGrid = ({ noOfQuestions, whichQues }) => {
             );
           })}
       </div>
-      <div className=" pt-5">
-        <StartButton buttonText={"Submit"} />
+      <div className=" pt-5" onClick={submitAnswers}>
+        <StartButton
+          buttonText={"Submit"}
+          isBtnDisabled={isSubmitBtnDisabled}
+        />
       </div>
     </div>
   );

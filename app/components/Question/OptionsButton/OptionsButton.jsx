@@ -1,10 +1,13 @@
 import React from "react";
 import "./OptionsButton.css";
 
-export const OptionsButton = ({ buttonText, checkMark, handler, idx }) => {
+export const OptionsButton = ({ buttonText, handler, idx, answer }) => {
   return (
     <div className="flex w-full justify-center">
-      <button className="optionsArrangement" onClick={() => handler(idx)}>
+      <button
+        className="optionsArrangement"
+        onClick={() => handler(idx, answer)}
+      >
         {buttonText}
       </button>
     </div>

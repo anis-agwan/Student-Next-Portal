@@ -46,7 +46,7 @@ export default function QuizInstruction({ searchParams }) {
             data = res;
           });
 
-          console.log(data);
+          // console.log(data);
 
           questionCtx.setPBData(data);
           questionCtx.createPBQStatus(Object.keys(data).length);
