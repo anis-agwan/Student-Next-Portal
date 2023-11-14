@@ -91,7 +91,7 @@ export const QuestionContextProvider = ({ children }) => {
               "Content-Type": "application/json",
             },
           });
-          console.log(res);
+          // console.log(res);
         } catch (err) {
           console.log(err);
         }

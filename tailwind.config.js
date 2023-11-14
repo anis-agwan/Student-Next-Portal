@@ -12,9 +12,16 @@ module.exports = {
         "auth-grey": "#818181",
       },
       backgroundImage: {
+        endScreen: "url('./Quiz/EndScreen/DSCN5677.jpg')",
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      blur: {
+        xs: "3px",
+      },
+      backdropBlur: {
+        xs: "3px",
       },
     },
   },

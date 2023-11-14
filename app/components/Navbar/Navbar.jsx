@@ -73,7 +73,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed flex w-auto h-1/12 w-full bg-binghamton-green p-2">
+      <nav className="fixed flex w-auto h-1/12 w-full bg-binghamton-green p-2 z-10">
         <div>
           <Image
             src={BULogo}

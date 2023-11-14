@@ -4,6 +4,7 @@ import { AuthButton } from "../Buttons/AuthButton/AuthButton";
 import { StartButton } from "../Buttons/StartButton/StartButton";
 import { QuestionContext } from "@/app/store/questions-context";
 import { AuthContext } from "@/app/store/auth-context";
+import { useRouter } from "next/navigation";
 
 export const QNumberGrid = ({
   noOfQuestions,
@@ -11,6 +12,7 @@ export const QNumberGrid = ({
   isSubmitBtnDisabled,
   section,
 }) => {
+  const router = useRouter();
   const questionCtx = useContext(QuestionContext);
   const authCtx = useContext(AuthContext);
   const questionStatus = questionCtx.pbQuestionStatus;
@@ -19,7 +21,14 @@ export const QNumberGrid = ({
 
   const submitAnswers = () => {
     authCtx.onUpdateStats(section);
-    questionCtx.submitPBAnswers();
+    questionCtx
+      .submitPBAnswers()
+      .then(() => {
+        router.push("Quiz/EndScreen");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
