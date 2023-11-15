@@ -4,15 +4,17 @@ import { SECTION } from "../enums/section_enums";
 
 export default function SelectionScreen() {
   return (
-    <div className=" flex justify-evenly	items-center h-screen">
-      <div>
-        <Card section={SECTION.PB} />
-      </div>
-      <div>
-        <Card section={SECTION.CT} />
-      </div>
-      <div>
-        <Card section={SECTION.DD} />
+    <div className=" flex  justify-center items-center h-screen ">
+      <div className="flex justify-evenly items-center h-full w-11/12 py-20">
+        <div>
+          <Card section={SECTION.PB} />
+        </div>
+        <div>
+          <Card section={SECTION.CT} />
+        </div>
+        <div>
+          <Card section={SECTION.DD} />
+        </div>
       </div>
     </div>
   );
