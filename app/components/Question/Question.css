@@ -7,10 +7,27 @@
   opacity: 0.8;
 }
 
+.sectionNumber {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.7vw;
+  line-height: 2.3vw;
+  opacity: 0.8;
+}
+
 .questionDesc {
   font-family: "Lato";
   font-style: normal;
   font-weight: 600;
   font-size: 30px;
   color: #414040;
+}
+
+.sectionDesc {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 1.7vw;
+  line-height: 2.3vw;
 }

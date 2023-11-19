@@ -33,7 +33,9 @@ export const QNumberGrid = ({
 
   return (
     <div className="boxContainer overflow-auto gap-3 p-5">
-      <div className=" questionHeading">Question 1/53</div>
+      <div className=" questionHeading">
+        Question {whichQues + 1}/{noOfQuestions}
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg: grid-cols-4 gap-y-2 justify-around items-center">
         {/* {arr.map((value, idx) => {
           return (

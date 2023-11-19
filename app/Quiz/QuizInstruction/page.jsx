@@ -29,7 +29,7 @@ export default function QuizInstruction({ searchParams }) {
   // const authCtx = useContext(AuthContext);
   const questionCtx = useContext(QuestionContext);
 
-  const [questions, setQuestions] = useState();
+  // const [questions, setQuestions] = useState();
 
   const data = getInstData(section, type);
   // console.log(data);
@@ -51,7 +51,7 @@ export default function QuizInstruction({ searchParams }) {
           questionCtx.setPBData(data);
           questionCtx.createPBQStatus(Object.keys(data).length);
 
-          setQuestions(data);
+          // setQuestions(data);
         } catch (err) {}
       }
     } else if (sectionName === SECTION.CT) {

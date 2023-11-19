@@ -34,6 +34,20 @@ export default function QuestionsPage({ searchParams }) {
     setLoadingData(false);
   };
 
+  const getCT = async () => {
+    setLoadingData(true);
+    // console.log(questionCtx.ctQuestions);
+    setQuestions(questionCtx.ctQuestions);
+    try {
+      const size = Object.keys(questions).length;
+      console.log("NO OF QUES: ", size);
+      setNoOfQuestions(size);
+    } catch (err) {
+      console.log(err);
+    }
+    setLoadingData(false);
+  };
+
   const nextBtnHandler = () => {
     setSubmitBtnDisabled(questionCtx.pbStatusComplete);
     console.log(questionNo + 1, noOfQuestions);
@@ -79,15 +93,20 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   useEffect(() => {
+    // console.log(section);
     if (section === SECTION.PB) {
       setLoadingData(true);
       // getQuestionsData(section);
       getPB();
       setLoadingData(false);
+    } else if (section === SECTION.CT) {
+      setLoadingData(true);
+      getCT();
+      setLoadingData(false);
     }
 
-    console.log(questions);
-    console.log(questionNo);
+    // console.log(questions);
+    // console.log(questionNo);
   }, [questions]);
 
   return (
@@ -96,16 +115,19 @@ export default function QuestionsPage({ searchParams }) {
         <div className="flex w-full h-full justify-between items-center gap-2">
           <div className="flex flex-col w-3/4 gap-5 justify-center items-center">
             <div className="h-1/4 pe-20 w-full px-20">
-              <ProgressBar completed={progress} />
+              {section === SECTION.PB && <ProgressBar completed={progress} />}
             </div>
             <div className="h-3/4 px-5 w-full">
-              <Question
-                nextBtnHandler={nextBtnHandler}
-                prevBtnHandler={prevBtnHandler}
-                questionNo={questionNo}
-                isPrevBtnDisabled={isPrevBtnDisabled}
-                isNextBtnDisabled={isNextBtnDisabled}
-              />
+              {noOfQuestions > 0 && (
+                <Question
+                  nextBtnHandler={nextBtnHandler}
+                  prevBtnHandler={prevBtnHandler}
+                  questionNo={questionNo}
+                  isPrevBtnDisabled={isPrevBtnDisabled}
+                  isNextBtnDisabled={isNextBtnDisabled}
+                  section={section}
+                />
+              )}
             </div>
           </div>
           <div className="flex w-1/4 justify-center items-center pt-20">

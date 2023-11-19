@@ -2,10 +2,11 @@ import { ArrowButton } from "@/app/components/Buttons/ArrowButton/ArrowButton";
 import tableImg from "./ddtable.png";
 import "./ExperimentTable.css";
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import { StartButton } from "@/app/components/Buttons/StartButton/StartButton";
 import { SECTION } from "@/app/enums/section_enums";
+import { QuestionContext } from "@/app/store/questions-context";
 
 export default function ExperimentTable() {
   return (

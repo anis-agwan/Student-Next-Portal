@@ -9,6 +9,8 @@ export const QuestionContext = createContext({
   ctQuestions: {},
   pbQuestionStatus: [],
   pbStatusComplete: false,
+  ctQuestionStatus: [],
+  ctStatusComplete: false,
   pbAnswers: {},
   getPBQuestion: () => {},
   getCTQuestion: () => {},
@@ -25,8 +27,10 @@ export const QuestionContextProvider = ({ children }) => {
   const [pbQuestions, setPBQuestions] = useState(null);
   const [ctQuestions, setCTQuestions] = useState(null);
   const [pbQuestionStatus, setPBQStatus] = useState([]);
+  const [ctQuestionStatus, setCTQStatus] = useState([]);
   const [pbAnswers, setPBAnswers] = useState();
   const [pbCompleteStatus, setPBCompleteStatus] = useState(false);
+  const [ctCompleteStatus, setCTCompleteStatus] = useState(false);
 
   const basePBCT = "http://3.14.232.42";
 
@@ -132,6 +136,8 @@ export const QuestionContextProvider = ({ children }) => {
         pbQuestionStatus: pbQuestionStatus,
         pbAnswers: pbAnswers,
         pbStatusComplete: pbCompleteStatus,
+        ctQuestionStatus: ctQuestionStatus,
+        ctStatusComplete: ctCompleteStatus,
         getPBQuestion: getPBQ,
         getCTQuestion: getCTQ,
         createPBQStatus: createPBQuesStatus,
