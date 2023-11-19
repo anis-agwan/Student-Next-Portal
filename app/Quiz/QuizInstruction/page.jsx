@@ -26,7 +26,7 @@ export default function QuizInstruction({ searchParams }) {
   const section = searchParams.section;
   const type = searchParams.type;
 
-  const authCtx = useContext(AuthContext);
+  // const authCtx = useContext(AuthContext);
   const questionCtx = useContext(QuestionContext);
 
   const [questions, setQuestions] = useState();

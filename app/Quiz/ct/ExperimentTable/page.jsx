@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { StartButton } from "@/app/components/Buttons/StartButton/StartButton";
+import { SECTION } from "@/app/enums/section_enums";
 
 export default function ExperimentTable() {
   return (
@@ -23,7 +24,16 @@ export default function ExperimentTable() {
           </div>
 
           <div>
-            <ArrowButton />
+            <Link
+              href={{
+                pathname: "/Quiz/Questions",
+                query: {
+                  section: SECTION.CT,
+                },
+              }}
+            >
+              <ArrowButton />
+            </Link>
           </div>
         </div>
       </div>
@@ -37,7 +47,14 @@ export default function ExperimentTable() {
             in the experiment.)
           </p>
         </div>
-        <Link href={""}>
+        <Link
+          href={{
+            pathname: "/Quiz/Questions",
+            query: {
+              section: SECTION.CT,
+            },
+          }}
+        >
           <StartButton buttonText={"Start"} />
         </Link>
       </div>

@@ -1,11 +1,42 @@
+"use client";
+
 import { StartButton } from "@/app/components/Buttons/StartButton/StartButton";
 import Link from "next/link";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import "./ExperimentDetails.css";
 import { ArrowButton } from "@/app/components/Buttons/ArrowButton/ArrowButton";
+import { QuestionContext } from "@/app/store/questions-context";
 
 export default function ExperimentDetails() {
+  const questionCtx = useContext(QuestionContext);
+  const [questions, setQuestions] = useState();
+
+  const getQuestionsData = async () => {
+    console.log("RUNNING");
+    console.log(questionCtx.ctQuestions);
+    if (questionCtx.ctQuestions === null) {
+      // setLoadingData(true);
+      try {
+        let data = {};
+        await questionCtx.getCTQuestion().then((res) => {
+          data = res;
+        });
+
+        // console.log(data);
+
+        questionCtx.setCTData(data);
+        // questionCtx.createPBQStatus(Object.keys(data).length);
+
+        setQuestions(data);
+      } catch (err) {}
+    }
+  };
+
+  useEffect(() => {
+    getQuestionsData();
+  }, []);
+
   return (
     <div className=" flex flex-col justify-evenly items-center h-screen pt-20 px-10 pb-5 gap-y-1 text-black">
       <h1 className="titleText flex">Experiment Description</h1>

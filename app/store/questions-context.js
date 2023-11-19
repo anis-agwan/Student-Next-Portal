@@ -2,16 +2,20 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./auth-context";
+import { data } from "autoprefixer";
 
 export const QuestionContext = createContext({
   pbQuestions: {},
+  ctQuestions: {},
   pbQuestionStatus: [],
   pbStatusComplete: false,
   pbAnswers: {},
   getPBQuestion: () => {},
+  getCTQuestion: () => {},
   createPBQStatus: () => {},
   setPBQStatus: (idx) => {},
   setPBData: ({}) => {},
+  setCTData: ({}) => {},
   setPBAnswer: (questionNo, answer) => {},
   submitPBAnswers: () => {},
 });
@@ -19,6 +23,7 @@ export const QuestionContext = createContext({
 export const QuestionContextProvider = ({ children }) => {
   const authCtx = useContext(AuthContext);
   const [pbQuestions, setPBQuestions] = useState(null);
+  const [ctQuestions, setCTQuestions] = useState(null);
   const [pbQuestionStatus, setPBQStatus] = useState([]);
   const [pbAnswers, setPBAnswers] = useState();
   const [pbCompleteStatus, setPBCompleteStatus] = useState(false);
@@ -52,9 +57,27 @@ export const QuestionContextProvider = ({ children }) => {
     }
   };
 
+  const getCTQ = async () => {
+    const url = `${basePBCT}:8442/critical-thinking/critical-thinking/getQuestions`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      setCTQuestions(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const setPBData = (data) => {
     // console.log("IS WORKING");
     setPBQuestions(data);
+  };
+
+  const setCTData = (data) => {
+    // console.log(data);
+    setCTQuestions(data);
   };
 
   const createPBQuesStatus = (size) => {
@@ -105,13 +128,16 @@ export const QuestionContextProvider = ({ children }) => {
     <QuestionContext.Provider
       value={{
         pbQuestions: pbQuestions,
+        ctQuestions: ctQuestions,
         pbQuestionStatus: pbQuestionStatus,
         pbAnswers: pbAnswers,
         pbStatusComplete: pbCompleteStatus,
         getPBQuestion: getPBQ,
+        getCTQuestion: getCTQ,
         createPBQStatus: createPBQuesStatus,
         setPBQStatus: settingPBQStatus,
         setPBData: setPBData,
+        setCTData: setCTData,
         setPBAnswer: settingPBAnswer,
         submitPBAnswers: submittingPBAnswers,
       }}
