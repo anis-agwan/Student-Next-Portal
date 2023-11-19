@@ -23,7 +23,7 @@ export const instructionsData = {
       "There are 3 sections in this Critical Thinking exercise. Each section requires you to perform a slightly different task.",
       "To go to the Experiment Description, please click on the button below.",
     ],
-    routeTo: "",
+    routeTo: "/Quiz/ct/ExperimentDetails",
   },
 
   DD: {

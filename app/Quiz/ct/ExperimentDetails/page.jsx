@@ -51,7 +51,7 @@ export default function ExperimentDetails() {
           </p>
         </div>
       </div>
-      <Link href={""}>
+      <Link href={"ExperimentTable"}>
         <ArrowButton />
       </Link>
     </div>

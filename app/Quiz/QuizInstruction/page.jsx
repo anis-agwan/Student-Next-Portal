@@ -78,7 +78,33 @@ export default function QuizInstruction({ searchParams }) {
         })}
       </div>
 
-      {type === SECTIONTYPE.information ? (
+      {section === SECTION.PB &&
+        (type === SECTIONTYPE.information ? (
+          <Link
+            href={{
+              pathname: data.routeTo,
+              query: {
+                section: SECTION.PB,
+                type: SECTIONTYPE.instructions,
+              },
+            }}
+          >
+            <ArrowButton />
+          </Link>
+        ) : (
+          <Link
+            href={{
+              pathname: "/Quiz/Questions",
+              query: {
+                section: SECTION.PB,
+              },
+            }}
+          >
+            <StartButton buttonText={"Start Quiz"} />
+          </Link>
+        ))}
+
+      {/* {type === SECTIONTYPE.information ? (
         <Link
           href={{
             pathname: data.routeTo,
@@ -100,6 +126,33 @@ export default function QuizInstruction({ searchParams }) {
           }}
         >
           <StartButton buttonText={"Start Quiz"} />
+        </Link>
+      )} */}
+
+      {section === SECTION.CT && (
+        <Link
+          href={{
+            pathname: data.routeTo,
+            query: {
+              section: SECTION.CT,
+            },
+          }}
+        >
+          <ArrowButton />
+        </Link>
+      )}
+
+      {section === SECTION.DD && (
+        <Link
+          href={{
+            pathname: data.routeTo,
+            query: {
+              section: SECTION.PB,
+              type: SECTIONTYPE.instructions,
+            },
+          }}
+        >
+          <ArrowButton />
         </Link>
       )}
     </div>
