@@ -5,6 +5,7 @@ import { StartButton } from "../Buttons/StartButton/StartButton";
 import { QuestionContext } from "@/app/store/questions-context";
 import { AuthContext } from "@/app/store/auth-context";
 import { useRouter } from "next/navigation";
+import { SECTION } from "@/app/enums/section_enums";
 
 export const QNumberGrid = ({
   noOfQuestions,
@@ -15,20 +16,35 @@ export const QNumberGrid = ({
   const router = useRouter();
   const questionCtx = useContext(QuestionContext);
   const authCtx = useContext(AuthContext);
-  const questionStatus = questionCtx.pbQuestionStatus;
+  let questionStatus = [];
+
+  if (section === SECTION.PB) {
+    questionStatus = questionCtx.pbQuestionStatus;
+  } else if (section === SECTION.CT) {
+    questionStatus = questionCtx.ctQuestionStatus;
+  }
 
   // console.log(section);
 
   const submitAnswers = () => {
     authCtx.onUpdateStats(section);
-    questionCtx
-      .submitPBAnswers()
-      .then(() => {
-        router.push("Quiz/EndScreen");
-      })
-      .catch((err) => {
-        console.log(err);
+    if (section === SECTION.PB) {
+      questionCtx
+        .submitPBAnswers()
+        .then(() => {
+          router.push("Quiz/EndScreen");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (section === SECTION.CT) {
+      // console.log("CLICKS CT");
+      questionCtx.submitCTAnswers().then((res) => {
+        if (res) {
+          router.push("EndScreen");
+        }
       });
+    }
   };
 
   return (

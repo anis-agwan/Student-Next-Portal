@@ -26,7 +26,7 @@ export default function ExperimentDetails() {
         // console.log(data);
 
         questionCtx.setCTData(data);
-        // questionCtx.createPBQStatus(Object.keys(data).length);
+        questionCtx.createCTQStatus(Object.keys(data).length);
 
         setQuestions(data);
       } catch (err) {}

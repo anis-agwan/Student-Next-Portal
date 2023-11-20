@@ -41,6 +41,8 @@ export const Question = ({
       questionCtx.setPBAnswer(idx, answer);
     } else if (section === SECTION.CT) {
       console.log(answer);
+      questionCtx.setCTQStatus(idx);
+      questionCtx.setCTAnswer(idx, answer);
     }
   };
 
@@ -85,7 +87,7 @@ export const Question = ({
                   </li>
                 </ol>
               ) : (
-                <h3 className="sectionDesc">{props.que.quesOption1}</h3>
+                <h2 className="sectionDesc">{question.quesOption1}</h2>
               )}
             </div>
           </div>

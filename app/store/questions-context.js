@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./auth-context";
-import { data } from "autoprefixer";
 
 export const QuestionContext = createContext({
   pbQuestions: {},
@@ -15,11 +14,15 @@ export const QuestionContext = createContext({
   getPBQuestion: () => {},
   getCTQuestion: () => {},
   createPBQStatus: () => {},
-  setPBQStatus: (idx) => {},
+  createCTQStatus: () => {},
+  setPBQStatus: () => {},
+  setCTQStatus: () => {},
   setPBData: ({}) => {},
   setCTData: ({}) => {},
   setPBAnswer: (questionNo, answer) => {},
+  setCTAnswer: (questionNo, answer) => {},
   submitPBAnswers: () => {},
+  submitCTAnswers: () => {},
 });
 
 export const QuestionContextProvider = ({ children }) => {
@@ -29,6 +32,7 @@ export const QuestionContextProvider = ({ children }) => {
   const [pbQuestionStatus, setPBQStatus] = useState([]);
   const [ctQuestionStatus, setCTQStatus] = useState([]);
   const [pbAnswers, setPBAnswers] = useState();
+  const [ctAnswers, setCTAnswers] = useState();
   const [pbCompleteStatus, setPBCompleteStatus] = useState(false);
   const [ctCompleteStatus, setCTCompleteStatus] = useState(false);
 
@@ -38,6 +42,12 @@ export const QuestionContextProvider = ({ children }) => {
     if (authCtx.isLoggedIn) {
       const user = JSON.parse(localStorage.getItem("userDetails"));
       setPBAnswers({
+        bingNumber: user.bingNumber,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+
+      setCTAnswers({
         bingNumber: user.bingNumber,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -89,6 +99,11 @@ export const QuestionContextProvider = ({ children }) => {
     setPBQStatus(arr);
   };
 
+  const createCTQStatus = (size) => {
+    const arr = Array(size).fill(0);
+    setCTQStatus(arr);
+  };
+
   const settingPBQStatus = (idx) => {
     let prevArr = pbQuestionStatus;
     prevArr[idx] = 1;
@@ -99,6 +114,14 @@ export const QuestionContextProvider = ({ children }) => {
     setPBCompleteStatus(pbQuestionStatus.includes(0));
   };
 
+  const settingCTQStatus = (idx) => {
+    let prevArr = ctQuestionStatus;
+    prevArr[idx] = 1;
+
+    setCTQStatus(prevArr);
+    setPBCompleteStatus(ctQuestionStatus.includes(0));
+  };
+
   const settingPBAnswer = (questionNo, answer) => {
     let ques = `pbQ${parseInt(questionNo) + 1}`;
     pbAnswers[ques] = parseInt(answer);
@@ -106,18 +129,30 @@ export const QuestionContextProvider = ({ children }) => {
     setPBAnswers({ ...pbAnswers });
   };
 
-  const submittingPBAnswers = () => {
+  const settingCTAnswer = (questionNo, answer) => {
+    let ques = `que${parseInt(questionNo) + 1}`;
+    ctAnswers[ques] = parseInt(answer);
+    console.log(ctAnswers);
+    setCTAnswers({ ...ctAnswers });
+  };
+
+  const submittingPBAnswers = async () => {
     if (!pbQuestionStatus.includes(0)) {
       if (authCtx.isLoggedIn) {
         // const user = JSON.parse(localStorage.getItem("userDetails"));
         try {
-          const res = fetch(`${basePBCT}:8441/personal-beliefs/pb/pbData/`, {
-            method: "POST",
-            body: JSON.stringify(pbAnswers),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const res = await fetch(
+            `${basePBCT}:8441/personal-beliefs/pb/pbData/`,
+            {
+              method: "POST",
+              body: JSON.stringify(pbAnswers),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          // return res.json();
           // console.log(res);
         } catch (err) {
           console.log(err);
@@ -126,6 +161,38 @@ export const QuestionContextProvider = ({ children }) => {
     } else {
       alert("Please complete the assessment with all answers.");
     }
+  };
+
+  const submittingCTAnswers = async () => {
+    // console.log("SUBMITTING CT");
+    if (!ctQuestionStatus.includes(0)) {
+      if (authCtx.isLoggedIn) {
+        try {
+          const res = await fetch(
+            `${basePBCT}:8442/critical-thinking/critical-thinking/ctData/`,
+            {
+              method: "POST",
+              body: JSON.stringify(ctAnswers),
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+
+          return true;
+          // const data = await res.json();
+
+          // console.log(res);
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      }
+    } else {
+      alert("Please complete the assessment with all answers.");
+    }
+    return false;
   };
 
   return (
@@ -141,11 +208,15 @@ export const QuestionContextProvider = ({ children }) => {
         getPBQuestion: getPBQ,
         getCTQuestion: getCTQ,
         createPBQStatus: createPBQuesStatus,
+        createCTQStatus: createCTQStatus,
         setPBQStatus: settingPBQStatus,
+        setCTQStatus: settingCTQStatus,
         setPBData: setPBData,
         setCTData: setCTData,
         setPBAnswer: settingPBAnswer,
+        setCTAnswer: settingCTAnswer,
         submitPBAnswers: submittingPBAnswers,
+        submitCTAnswers: submittingCTAnswers,
       }}
     >
       {children}
