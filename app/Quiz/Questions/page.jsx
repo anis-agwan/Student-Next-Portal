@@ -48,6 +48,20 @@ export default function QuestionsPage({ searchParams }) {
     setLoadingData(false);
   };
 
+  const getDD = async () => {
+    setLoadingData(true);
+    console.log(questionCtx.ddQuestions);
+    setQuestions(questionCtx.ddQuestions);
+    try {
+      const size = Object.keys(questions).length;
+      console.log("NO OF QUES: ", size);
+      setNoOfQuestions(size);
+    } catch (err) {
+      console.log(err);
+    }
+    setLoadingData(false);
+  };
+
   const nextBtnHandler = () => {
     setSubmitBtnDisabled(questionCtx.pbStatusComplete);
     console.log(questionNo + 1, noOfQuestions);
@@ -103,6 +117,10 @@ export default function QuestionsPage({ searchParams }) {
       setLoadingData(true);
       getCT();
       setLoadingData(false);
+    } else if (section === SECTION.DD) {
+      setLoadingData(true);
+      getDD();
+      setLoadingData(false);
     }
 
     // console.log(questions);
@@ -110,35 +128,58 @@ export default function QuestionsPage({ searchParams }) {
   }, [questions]);
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen text-black">
+    <div className="flex justify-center items-center min-w-screen min-h-screen text-black">
       {!loadingData && noOfQuestions > 0 ? (
         <div className="flex w-full h-full justify-between items-center gap-2">
-          <div className="flex flex-col w-3/4 gap-5 justify-center items-center">
-            <div className="h-1/4 pe-20 w-full px-20">
-              {section === SECTION.PB && <ProgressBar completed={progress} />}
-            </div>
-            <div className="h-3/4 px-5 w-full">
-              {noOfQuestions > 0 && (
-                <Question
-                  nextBtnHandler={nextBtnHandler}
-                  prevBtnHandler={prevBtnHandler}
-                  questionNo={questionNo}
-                  isPrevBtnDisabled={isPrevBtnDisabled}
-                  isNextBtnDisabled={isNextBtnDisabled}
+          {!(section === SECTION.DD) ? (
+            <>
+              <div className="flex flex-col w-3/4 gap-5 justify-center items-center">
+                <div className="h-1/4 pe-20 w-full px-20">
+                  {section === SECTION.PB && (
+                    <ProgressBar completed={progress} />
+                  )}
+                </div>
+                <div className="h-3/4 px-5 w-full">
+                  {noOfQuestions > 0 && (
+                    <Question
+                      nextBtnHandler={nextBtnHandler}
+                      prevBtnHandler={prevBtnHandler}
+                      questionNo={questionNo}
+                      isPrevBtnDisabled={isPrevBtnDisabled}
+                      isNextBtnDisabled={isNextBtnDisabled}
+                      section={section}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="flex w-1/4 justify-center items-center pt-20">
+                <QNumberGrid
+                  noOfQuestions={noOfQuestions}
+                  whichQues={questionNo}
+                  isSubmitBtnDisabled={isSubmitBtnDisabled}
                   section={section}
+                  // questionStatus={questionStatus}
                 />
-              )}
-            </div>
-          </div>
-          <div className="flex w-1/4 justify-center items-center pt-20">
-            <QNumberGrid
-              noOfQuestions={noOfQuestions}
-              whichQues={questionNo}
-              isSubmitBtnDisabled={isSubmitBtnDisabled}
-              section={section}
-              // questionStatus={questionStatus}
-            />
-          </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col w-full justify-center items-center">
+                <div className="h-3/4 px-5 w-full">
+                  {noOfQuestions > 0 && (
+                    <Question
+                      nextBtnHandler={nextBtnHandler}
+                      prevBtnHandler={prevBtnHandler}
+                      questionNo={questionNo}
+                      isPrevBtnDisabled={isPrevBtnDisabled}
+                      isNextBtnDisabled={isNextBtnDisabled}
+                      section={section}
+                    />
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       ) : (
         <>

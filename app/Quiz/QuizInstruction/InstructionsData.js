@@ -33,6 +33,6 @@ export const instructionsData = {
       "Be sure to make a response to every statement, even if you have to guess at some.",
       "Click on the button below to go to the first scenario.",
     ],
-    routeTo: "",
+    // routeTo: "Quiz/Questions",
   },
 };

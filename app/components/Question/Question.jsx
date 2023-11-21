@@ -4,6 +4,7 @@ import { OptionsButton } from "./OptionsButton/OptionsButton";
 import { StartButton } from "../Buttons/StartButton/StartButton";
 import { QuestionContext } from "@/app/store/questions-context";
 import { SECTION } from "@/app/enums/section_enums";
+import { RateInputField } from "./RatinInputField/RateInputField";
 
 export const Question = ({
   nextBtnHandler,
@@ -20,14 +21,64 @@ export const Question = ({
     question = questionCtx.pbQuestions[questionNo];
   } else if (section === SECTION.CT) {
     question = questionCtx.ctQuestions[questionNo];
+  } else if (section === SECTION.DD) {
+    question = questionCtx.ddQuestions[questionNo];
+  }
+
+  function createOptionsArr(q) {
+    let arr = [];
+    for (const [key, value] of Object.entries(q)) {
+      if (key === "r1Text" && value !== null) {
+        arr.push({
+          r1Text: "r1Text",
+          value: value,
+        });
+      } else if (key === "r2Text" && value !== null) {
+        arr.push({
+          r2Text: "r2Text",
+          value: value,
+        });
+      } else if (key === "r3Text" && value !== null) {
+        arr.push({
+          r3Text: "r3Text",
+          value: value,
+        });
+      } else if (key === "r4Text" && value !== null) {
+        arr.push({
+          r4Text: "r4Text",
+          value: value,
+        });
+      } else if (key === "r5Text" && value !== null) {
+        arr.push({
+          r5Text: "r5Text",
+          value: value,
+        });
+      } else if (key === "r6Text" && value !== null) {
+        arr.push({
+          r6Text: "r6Text",
+          value: value,
+        });
+      }
+    }
+
+    return arr;
+    // console.log(arr);
   }
 
   // const [questionStatus, setQuesStatus] = useState([]);
-  const questionOptions = [
-    question.ansOption1,
-    question.ansOption2,
-    question.ansOption3,
-  ];
+  let questionOptions = [];
+
+  if (section === SECTION.CT) {
+    questionOptions = [
+      question.ansOption1,
+      question.ansOption2,
+      question.ansOption3,
+    ];
+  } else if (section === SECTION.DD) {
+    questionOptions = createOptionsArr(question);
+    console.log(questionOptions);
+    // console.log(questionOptions.length);
+  }
 
   useEffect(() => {
     console.log(question);
@@ -93,6 +144,18 @@ export const Question = ({
           </div>
         </>
       )}
+      {section === SECTION.DD && (
+        <>
+          <div>
+            <div>
+              <h2 className="sectionNumber">Section {question.snum}</h2>
+            </div>
+            <div>
+              <h2 className="sectionDesc"> {question.stext}</h2>
+            </div>
+          </div>
+        </>
+      )}
       {section === SECTION.PB && (
         <>
           <div className="flex flex-col optionsDiv gap-y-2 items-center">
@@ -125,6 +188,35 @@ export const Question = ({
                 />
               );
             })}
+          </div>
+        </>
+      )}
+      {section === SECTION.DD && (
+        <>
+          <div className="flex flex-col optionsDiv gap-y-2 items-center">
+            {questionOptions.map((q, idx) => {
+              return (
+                <>
+                  <OptionsButton
+                    key={idx + 1}
+                    buttonText={`Option ${idx + 1}: ${q.value} `}
+                    handler={ansButtonHandler}
+                    idx={questionNo}
+                    answer={idx + 1}
+                    className="text-xs"
+                  />
+                </>
+              );
+            })}
+          </div>
+        </>
+      )}
+      {section === SECTION.DD && (
+        <>
+          <div>
+            {questionOptions.length > 0 && (
+              <RateInputField noOfOptions={questionOptions.length} />
+            )}
           </div>
         </>
       )}

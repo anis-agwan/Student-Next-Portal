@@ -52,10 +52,27 @@ export default function QuizInstruction({ searchParams }) {
           questionCtx.createPBQStatus(Object.keys(data).length);
 
           // setQuestions(data);
-        } catch (err) {}
+        } catch (err) {
+          console.log(err);
+        }
       }
     } else if (sectionName === SECTION.CT) {
     } else if (sectionName === SECTION.DD) {
+      console.log(questionCtx.ddQuestions);
+      if (questionCtx.ddQuestions === null) {
+        // console.log("NULL");
+        try {
+          let data = {};
+          await questionCtx.getDDQuestion().then((res) => {
+            data = res;
+          });
+          console.log(data);
+
+          questionCtx.setDDData(data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
     }
   };
 
@@ -145,10 +162,9 @@ export default function QuizInstruction({ searchParams }) {
       {section === SECTION.DD && (
         <Link
           href={{
-            pathname: data.routeTo,
+            pathname: "/Quiz/Questions",
             query: {
-              section: SECTION.PB,
-              type: SECTIONTYPE.instructions,
+              section: SECTION.DD,
             },
           }}
         >

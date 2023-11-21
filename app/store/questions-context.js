@@ -2,10 +2,12 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./auth-context";
+import { data } from "autoprefixer";
 
 export const QuestionContext = createContext({
   pbQuestions: {},
   ctQuestions: {},
+  ddQuestions: {},
   pbQuestionStatus: [],
   pbStatusComplete: false,
   ctQuestionStatus: [],
@@ -13,12 +15,14 @@ export const QuestionContext = createContext({
   pbAnswers: {},
   getPBQuestion: () => {},
   getCTQuestion: () => {},
+  getDDQuestion: () => {},
   createPBQStatus: () => {},
   createCTQStatus: () => {},
   setPBQStatus: () => {},
   setCTQStatus: () => {},
   setPBData: ({}) => {},
   setCTData: ({}) => {},
+  setDDData: ({}) => {},
   setPBAnswer: (questionNo, answer) => {},
   setCTAnswer: (questionNo, answer) => {},
   submitPBAnswers: () => {},
@@ -29,6 +33,7 @@ export const QuestionContextProvider = ({ children }) => {
   const authCtx = useContext(AuthContext);
   const [pbQuestions, setPBQuestions] = useState(null);
   const [ctQuestions, setCTQuestions] = useState(null);
+  const [ddQuestions, setDDQuestions] = useState(null);
   const [pbQuestionStatus, setPBQStatus] = useState([]);
   const [ctQuestionStatus, setCTQStatus] = useState([]);
   const [pbAnswers, setPBAnswers] = useState();
@@ -37,6 +42,7 @@ export const QuestionContextProvider = ({ children }) => {
   const [ctCompleteStatus, setCTCompleteStatus] = useState(false);
 
   const basePBCT = "http://3.14.232.42";
+  const baseDDBI = "http://3.14.159.174";
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
@@ -84,6 +90,19 @@ export const QuestionContextProvider = ({ children }) => {
     }
   };
 
+  const getDDQ = async () => {
+    const url = `${baseDDBI}:8443/situation_q/sq/getSQuestions`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      // console.log(data);
+      setDDQuestions(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const setPBData = (data) => {
     // console.log("IS WORKING");
     setPBQuestions(data);
@@ -92,6 +111,10 @@ export const QuestionContextProvider = ({ children }) => {
   const setCTData = (data) => {
     // console.log(data);
     setCTQuestions(data);
+  };
+
+  const setDDData = (data) => {
+    setDDQuestions(data);
   };
 
   const createPBQuesStatus = (size) => {
@@ -119,7 +142,7 @@ export const QuestionContextProvider = ({ children }) => {
     prevArr[idx] = 1;
 
     setCTQStatus(prevArr);
-    setPBCompleteStatus(ctQuestionStatus.includes(0));
+    setCTCompleteStatus(ctQuestionStatus.includes(0));
   };
 
   const settingPBAnswer = (questionNo, answer) => {
@@ -200,6 +223,7 @@ export const QuestionContextProvider = ({ children }) => {
       value={{
         pbQuestions: pbQuestions,
         ctQuestions: ctQuestions,
+        ddQuestions: ddQuestions,
         pbQuestionStatus: pbQuestionStatus,
         pbAnswers: pbAnswers,
         pbStatusComplete: pbCompleteStatus,
@@ -207,12 +231,14 @@ export const QuestionContextProvider = ({ children }) => {
         ctStatusComplete: ctCompleteStatus,
         getPBQuestion: getPBQ,
         getCTQuestion: getCTQ,
+        getDDQuestion: getDDQ,
         createPBQStatus: createPBQuesStatus,
         createCTQStatus: createCTQStatus,
         setPBQStatus: settingPBQStatus,
         setCTQStatus: settingCTQStatus,
         setPBData: setPBData,
         setCTData: setCTData,
+        setDDData: setDDData,
         setPBAnswer: settingPBAnswer,
         setCTAnswer: settingCTAnswer,
         submitPBAnswers: submittingPBAnswers,
