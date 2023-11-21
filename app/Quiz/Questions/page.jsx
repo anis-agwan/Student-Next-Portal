@@ -3,9 +3,10 @@
 import { ProgressBar } from "@/app/components/ProgressBar/ProgressBar";
 import { Question } from "@/app/components/Question/Question";
 import { QNumberGrid } from "@/app/components/QuestionNumberGrid/QNumberGrid";
+import { DD_INPUTS } from "@/app/enums/dd_input";
 import { SECTION } from "@/app/enums/section_enums";
 import { QuestionContext } from "@/app/store/questions-context";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 export default function QuestionsPage({ searchParams }) {
   const section = searchParams.section;
@@ -19,6 +20,48 @@ export default function QuestionsPage({ searchParams }) {
   const [isPrevBtnDisabled, setPrevBtnDisabled] = useState(false);
   const [isNextBtnDisabled, setNextBtnDisabled] = useState(false);
   const [isSubmitBtnDisabled, setSubmitBtnDisabled] = useState(true);
+
+  const [optCount, setOPCount] = useState(0);
+
+  //FOR DD
+  const [formValues, setFormValues] = useState([{ rank: "Rank1", value: "" }]);
+  const [ratingFormValues, setRatingFormValues] = useState([]);
+
+  const handleFormChange = (event, idx, whichOP) => {
+    console.log(event.target.value, idx);
+    if (formValues.length === optCount) {
+      if (ratingFormValues.length === 0) {
+        addRatingFields(-1);
+      } else if (
+        ratingFormValues.length !== optCount &&
+        idx + 1 === ratingFormValues.length
+      ) {
+        addRatingFields(idx);
+      }
+    }
+
+    if (formValues.length !== optCount && idx + 1 === formValues.length) {
+      //   console.log("IDX: ", idx + 1);
+      addFields(idx);
+    }
+
+    if (whichOP === DD_INPUTS.RANKSR) {
+      questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RANKSR);
+    } else if (whichOP === DD_INPUTS.RATESR) {
+      questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RATESR);
+    }
+  };
+
+  const addFields = (idx) => {
+    setFormValues([...formValues, { rank: `Rank${idx + 2}`, value: "" }]);
+  };
+
+  const addRatingFields = (idx) => {
+    setRatingFormValues([
+      ...ratingFormValues,
+      { rating: `Rating${idx + 2}`, value: "" },
+    ]);
+  };
 
   const getPB = async () => {
     setLoadingData(true);
@@ -63,7 +106,11 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   const nextBtnHandler = () => {
-    setSubmitBtnDisabled(questionCtx.pbStatusComplete);
+    if (section === SECTION.PB) {
+      setSubmitBtnDisabled(questionCtx.pbStatusComplete);
+    } else if (section === SECTION.CT) {
+      setSubmitBtnDisabled(questionCtx.ctStatusComplete);
+    }
     console.log(questionNo + 1, noOfQuestions);
     if (questionNo + 1 < noOfQuestions) {
       setQuestionNo(questionNo + 1);
@@ -86,6 +133,12 @@ export default function QuestionsPage({ searchParams }) {
       const newProgress = Math.floor(((questionNo + 1) / noOfQuestions) * 100);
       setProgress(newProgress);
     }
+
+    if (section === SECTION.DD) {
+      questionCtx.setDDCounter(optCount, "next", noOfQuestions);
+      setFormValues([{ rank: "Rank1", value: "" }]);
+      setRatingFormValues([]);
+    }
   };
 
   const prevBtnHandler = () => {
@@ -104,6 +157,17 @@ export default function QuestionsPage({ searchParams }) {
       setPrevBtnDisabled(true);
       setNextBtnDisabled(false);
     }
+
+    if (section === SECTION.DD) {
+      questionCtx.setDDCounter(optCount, "prev");
+      setFormValues([{ rank: "Rank1", value: "" }]);
+      setRatingFormValues([]);
+    }
+  };
+
+  const getOptionsCount = (val) => {
+    // console.log(val);
+    setOPCount(val);
   };
 
   useEffect(() => {
@@ -174,6 +238,11 @@ export default function QuestionsPage({ searchParams }) {
                       isPrevBtnDisabled={isPrevBtnDisabled}
                       isNextBtnDisabled={isNextBtnDisabled}
                       section={section}
+                      getOPCount={getOptionsCount}
+                      isSubmitBtnDisabled={isSubmitBtnDisabled}
+                      formValues={formValues}
+                      ratingFormValues={ratingFormValues}
+                      handleFormChange={handleFormChange}
                     />
                   )}
                 </div>

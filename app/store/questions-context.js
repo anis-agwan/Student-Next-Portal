@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./auth-context";
 import { data } from "autoprefixer";
+import { DD_INPUTS } from "../enums/dd_input";
 
 export const QuestionContext = createContext({
   pbQuestions: {},
@@ -12,21 +13,31 @@ export const QuestionContext = createContext({
   pbStatusComplete: false,
   ctQuestionStatus: [],
   ctStatusComplete: false,
+  ddQuestionStatus: [],
+  ddStatusComplete: false,
   pbAnswers: {},
+  ctAnswers: {},
+  ddAnswers: {},
   getPBQuestion: () => {},
   getCTQuestion: () => {},
   getDDQuestion: () => {},
   createPBQStatus: () => {},
   createCTQStatus: () => {},
+  createDDQStatus: () => {},
   setPBQStatus: () => {},
   setCTQStatus: () => {},
+  setDDQStatus: () => {},
   setPBData: ({}) => {},
   setCTData: ({}) => {},
   setDDData: ({}) => {},
   setPBAnswer: (questionNo, answer) => {},
   setCTAnswer: (questionNo, answer) => {},
+  setDDAnswer: (questionNo, opID, answer, whichInput) => {},
   submitPBAnswers: () => {},
   submitCTAnswers: () => {},
+  submitDDAnswers: () => {},
+  ddCounter: 0,
+  setDDCounter: () => {},
 });
 
 export const QuestionContextProvider = ({ children }) => {
@@ -36,10 +47,15 @@ export const QuestionContextProvider = ({ children }) => {
   const [ddQuestions, setDDQuestions] = useState(null);
   const [pbQuestionStatus, setPBQStatus] = useState([]);
   const [ctQuestionStatus, setCTQStatus] = useState([]);
+  const [ddQuestionStatus, setDDQStatus] = useState([]);
   const [pbAnswers, setPBAnswers] = useState();
   const [ctAnswers, setCTAnswers] = useState();
+  const [ddAnswers, setDDAnswers] = useState();
   const [pbCompleteStatus, setPBCompleteStatus] = useState(false);
   const [ctCompleteStatus, setCTCompleteStatus] = useState(false);
+  const [ddCompleteStatus, setDDCompleteStatus] = useState(false);
+
+  const [ddCounter, setDDCounter] = useState(0);
 
   const basePBCT = "http://3.14.232.42";
   const baseDDBI = "http://3.14.159.174";
@@ -57,6 +73,10 @@ export const QuestionContextProvider = ({ children }) => {
         bingNumber: user.bingNumber,
         firstName: user.firstName,
         lastName: user.lastName,
+      });
+
+      setDDAnswers({
+        bingNumber: user.bingNumber,
       });
     }
   }, [authCtx.isLoggedIn]);
@@ -127,6 +147,12 @@ export const QuestionContextProvider = ({ children }) => {
     setCTQStatus(arr);
   };
 
+  const createDDQStatus = (size, optionsSize) => {
+    const arr = Array(size).fill([0] * optionsSize);
+    // setCTQStatus(arr);
+    setDDQStatus(arr);
+  };
+
   const settingPBQStatus = (idx) => {
     let prevArr = pbQuestionStatus;
     prevArr[idx] = 1;
@@ -145,6 +171,22 @@ export const QuestionContextProvider = ({ children }) => {
     setCTCompleteStatus(ctQuestionStatus.includes(0));
   };
 
+  const settingDDQStatus = (qID, opID) => {
+    let prevArr = ctQuestionStatus;
+    tempArr = prevArr[qID];
+
+    tempArr[opID] = 1;
+    prevArr[qID] = tempArr;
+
+    setDDQStatus(prevArr);
+    let comp = true;
+    prevArr.forEach((elem) => {
+      comp = elem.includes(0) ? false : true;
+    });
+
+    setDDCompleteStatus(comp);
+  };
+
   const settingPBAnswer = (questionNo, answer) => {
     let ques = `pbQ${parseInt(questionNo) + 1}`;
     pbAnswers[ques] = parseInt(answer);
@@ -157,6 +199,19 @@ export const QuestionContextProvider = ({ children }) => {
     ctAnswers[ques] = parseInt(answer);
     console.log(ctAnswers);
     setCTAnswers({ ...ctAnswers });
+  };
+
+  const settingDDAnswer = (opID, answer, whichInput) => {
+    let ques = `${whichInput}${ddCounter + parseInt(opID) + 1}`;
+    if (whichInput === DD_INPUTS.RANKSR) {
+      ddAnswers[ques] = ddCounter + parseInt(answer);
+      console.log(ddAnswers);
+      setDDAnswers({ ...ddAnswers });
+    } else if (whichInput === DD_INPUTS.RATESR) {
+      ddAnswers[ques] = parseInt(answer);
+      console.log(ddAnswers);
+      setDDAnswers({ ...ddAnswers });
+    }
   };
 
   const submittingPBAnswers = async () => {
@@ -218,6 +273,28 @@ export const QuestionContextProvider = ({ children }) => {
     return false;
   };
 
+  const submittingDDAnswers = async () => {
+    if (!ddCompleteStatus) {
+      if (authCtx.isLoggedIn) {
+      }
+    } else {
+      alert("Please complete the assessment with all answers.");
+    }
+  };
+
+  const settingDDCounter = (val, whichBtn, quesLen) => {
+    console.log(quesLen);
+    if (ddCounter + val <= quesLen && whichBtn === "next") {
+      let newCount = ddCounter + val;
+      setDDCounter(newCount);
+    } else if (ddCounter != 0 && whichBtn === "prev") {
+      let newCount = ddCounter - val;
+      setDDCounter(newCount);
+    }
+
+    console.log(ddCounter);
+  };
+
   return (
     <QuestionContext.Provider
       value={{
@@ -226,14 +303,19 @@ export const QuestionContextProvider = ({ children }) => {
         ddQuestions: ddQuestions,
         pbQuestionStatus: pbQuestionStatus,
         pbAnswers: pbAnswers,
+        ctAnswers: ctAnswers,
         pbStatusComplete: pbCompleteStatus,
         ctQuestionStatus: ctQuestionStatus,
         ctStatusComplete: ctCompleteStatus,
+        ddQuestionStatus: ddQuestionStatus,
+        ddStatusComplete: ddCompleteStatus,
         getPBQuestion: getPBQ,
         getCTQuestion: getCTQ,
         getDDQuestion: getDDQ,
         createPBQStatus: createPBQuesStatus,
         createCTQStatus: createCTQStatus,
+        createDDQStatus: createDDQStatus,
+        setDDQStatus: settingDDQStatus,
         setPBQStatus: settingPBQStatus,
         setCTQStatus: settingCTQStatus,
         setPBData: setPBData,
@@ -241,8 +323,11 @@ export const QuestionContextProvider = ({ children }) => {
         setDDData: setDDData,
         setPBAnswer: settingPBAnswer,
         setCTAnswer: settingCTAnswer,
+        setDDAnswer: settingDDAnswer,
         submitPBAnswers: submittingPBAnswers,
         submitCTAnswers: submittingCTAnswers,
+        ddCounter: ddCounter,
+        setDDCounter: settingDDCounter,
       }}
     >
       {children}

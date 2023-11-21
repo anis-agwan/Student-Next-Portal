@@ -13,6 +13,11 @@ export const Question = ({
   isPrevBtnDisabled,
   isNextBtnDisabled,
   section,
+  getOPCount,
+  isSubmitBtnDisabled,
+  formValues,
+  ratingFormValues,
+  handleFormChange,
 }) => {
   const questionCtx = useContext(QuestionContext);
 
@@ -76,14 +81,17 @@ export const Question = ({
     ];
   } else if (section === SECTION.DD) {
     questionOptions = createOptionsArr(question);
-    console.log(questionOptions);
+    // console.log(questionOptions);
     // console.log(questionOptions.length);
   }
 
   useEffect(() => {
-    console.log(question);
+    // console.log(question);
     // setQuesStatus(questionCtx.pbQuestionStatus);
-  }, []);
+    if (section === SECTION.DD) {
+      getOPCount(questionOptions.length);
+    }
+  }, [questionOptions]);
 
   const ansButtonHandler = (idx, answer) => {
     // console.log("Q: ", idx + 1, " ANS: ", answer);
@@ -91,14 +99,14 @@ export const Question = ({
       questionCtx.setPBQStatus(idx);
       questionCtx.setPBAnswer(idx, answer);
     } else if (section === SECTION.CT) {
-      console.log(answer);
+      // console.log(answer);
       questionCtx.setCTQStatus(idx);
       questionCtx.setCTAnswer(idx, answer);
     }
   };
 
   return (
-    <div className="flex flex-col gap-3 justify-center px-10 ">
+    <div className="flex flex-col gap-3 justify-center px-10 pb-8">
       {section === SECTION.PB && (
         <>
           <div>
@@ -146,7 +154,7 @@ export const Question = ({
       )}
       {section === SECTION.DD && (
         <>
-          <div>
+          <div className="pt-20">
             <div>
               <h2 className="sectionNumber">Section {question.snum}</h2>
             </div>
@@ -200,7 +208,9 @@ export const Question = ({
                   <OptionsButton
                     key={idx + 1}
                     buttonText={`Option ${idx + 1}: ${q.value} `}
-                    handler={ansButtonHandler}
+                    handler={() => {
+                      alert("Fill the below forms for rankings and ratings");
+                    }}
                     idx={questionNo}
                     answer={idx + 1}
                     className="text-xs"
@@ -213,9 +223,14 @@ export const Question = ({
       )}
       {section === SECTION.DD && (
         <>
-          <div>
+          <div className="pt-8">
             {questionOptions.length > 0 && (
-              <RateInputField noOfOptions={questionOptions.length} />
+              <RateInputField
+                noOfOptions={questionOptions.length}
+                formValues={formValues}
+                ratingFormValues={ratingFormValues}
+                handleFormChange={handleFormChange}
+              />
             )}
           </div>
         </>
@@ -227,6 +242,14 @@ export const Question = ({
         <div onClick={nextBtnHandler}>
           <StartButton buttonText={"Next"} isBtnDisabled={isNextBtnDisabled} />
         </div>
+        {section === SECTION.DD && (
+          <div onClick={prevBtnHandler}>
+            <StartButton
+              buttonText={"Submit"}
+              isBtnDisabled={isSubmitBtnDisabled}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ export const QNumberGrid = ({
   if (section === SECTION.PB) {
     questionStatus = questionCtx.pbQuestionStatus;
   } else if (section === SECTION.CT) {
+    console.log(questionCtx.ctQuestionStatus);
     questionStatus = questionCtx.ctQuestionStatus;
   }
 
