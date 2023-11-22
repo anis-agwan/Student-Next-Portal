@@ -9,47 +9,6 @@ export const RateInputField = ({
   ratingFormValues,
   handleFormChange,
 }) => {
-  const questionCtx = useContext(QuestionContext);
-
-  //   const [formValues, setFormValues] = useState([{ rank: "Rank1", value: "" }]);
-  //   const [ratingFormValues, setRatingFormValues] = useState([]);
-
-  //   const handleChange = (event, idx, whichOP) => {
-  //     console.log(event.target.value, idx);
-  //     if (formValues.length === noOfOptions) {
-  //       if (ratingFormValues.length === 0) {
-  //         addRatingFields(-1);
-  //       } else if (
-  //         ratingFormValues.length !== noOfOptions &&
-  //         idx + 1 === ratingFormValues.length
-  //       ) {
-  //         addRatingFields(idx);
-  //       }
-  //     }
-
-  //     if (formValues.length !== noOfOptions && idx + 1 === formValues.length) {
-  //       //   console.log("IDX: ", idx + 1);
-  //       addFields(idx);
-  //     }
-
-  //     if (whichOP === DD_INPUTS.RANKSR) {
-  //       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RANKSR);
-  //     } else if (whichOP === DD_INPUTS.RATESR) {
-  //       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RATESR);
-  //     }
-  //   };
-
-  //   const addFields = (idx) => {
-  //     setFormValues([...formValues, { rank: `Rank${idx + 2}`, value: "" }]);
-  //   };
-
-  //   const addRatingFields = (idx) => {
-  //     setRatingFormValues([
-  //       ...ratingFormValues,
-  //       { rating: `Rating${idx + 2}`, value: "" },
-  //     ]);
-  //   };
-
   return (
     <>
       <div className="flex w-full gap-14">

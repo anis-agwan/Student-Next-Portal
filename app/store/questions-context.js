@@ -147,10 +147,11 @@ export const QuestionContextProvider = ({ children }) => {
     setCTQStatus(arr);
   };
 
-  const createDDQStatus = (size, optionsSize) => {
-    const arr = Array(size).fill([0] * optionsSize);
+  const createDDQStatus = (size) => {
+    const arr = Array(size).fill(0);
     // setCTQStatus(arr);
     setDDQStatus(arr);
+    console.log(arr);
   };
 
   const settingPBQStatus = (idx) => {
@@ -171,20 +172,16 @@ export const QuestionContextProvider = ({ children }) => {
     setCTCompleteStatus(ctQuestionStatus.includes(0));
   };
 
-  const settingDDQStatus = (qID, opID) => {
-    let prevArr = ctQuestionStatus;
-    tempArr = prevArr[qID];
-
-    tempArr[opID] = 1;
-    prevArr[qID] = tempArr;
+  const settingDDQStatus = (idx) => {
+    let prevArr = ddQuestionStatus;
+    prevArr[idx] = 1;
 
     setDDQStatus(prevArr);
-    let comp = true;
-    prevArr.forEach((elem) => {
-      comp = elem.includes(0) ? false : true;
-    });
+    setDDCompleteStatus(ddQuestionStatus.includes(0));
 
-    setDDCompleteStatus(comp);
+    // console.log(prevArr);
+
+    // setDDCompleteStatus(comp);
   };
 
   const settingPBAnswer = (questionNo, answer) => {
@@ -203,6 +200,7 @@ export const QuestionContextProvider = ({ children }) => {
 
   const settingDDAnswer = (opID, answer, whichInput) => {
     let ques = `${whichInput}${ddCounter + parseInt(opID) + 1}`;
+    console.log(ddAnswers);
     if (whichInput === DD_INPUTS.RANKSR) {
       ddAnswers[ques] = ddCounter + parseInt(answer);
       console.log(ddAnswers);
@@ -243,6 +241,7 @@ export const QuestionContextProvider = ({ children }) => {
 
   const submittingCTAnswers = async () => {
     // console.log("SUBMITTING CT");
+    console.log(ctQuestionStatus);
     if (!ctQuestionStatus.includes(0)) {
       if (authCtx.isLoggedIn) {
         try {
@@ -274,8 +273,23 @@ export const QuestionContextProvider = ({ children }) => {
   };
 
   const submittingDDAnswers = async () => {
-    if (!ddCompleteStatus) {
+    console.log(ddQuestionStatus.includes(0));
+
+    console.log(ddAnswers);
+    if (!ddQuestionStatus.includes(0)) {
       if (authCtx.isLoggedIn) {
+        try {
+          const res = await fetch(`${baseDDBI}:8443/situation_q/sq/sqData`, {
+            method: "POST",
+            body: JSON.stringify(ddAnswers),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
       }
     } else {
       alert("Please complete the assessment with all answers.");
@@ -283,11 +297,12 @@ export const QuestionContextProvider = ({ children }) => {
   };
 
   const settingDDCounter = (val, whichBtn, quesLen) => {
-    console.log(quesLen);
-    if (ddCounter + val <= quesLen && whichBtn === "next") {
+    // console.log(ddCounter, quesLen);
+    if (whichBtn === "next") {
       let newCount = ddCounter + val;
+      // console.log(newCount);
       setDDCounter(newCount);
-    } else if (ddCounter != 0 && whichBtn === "prev") {
+    } else if (whichBtn === "prev") {
       let newCount = ddCounter - val;
       setDDCounter(newCount);
     }
@@ -326,6 +341,7 @@ export const QuestionContextProvider = ({ children }) => {
         setDDAnswer: settingDDAnswer,
         submitPBAnswers: submittingPBAnswers,
         submitCTAnswers: submittingCTAnswers,
+        submitDDAnswers: submittingDDAnswers,
         ddCounter: ddCounter,
         setDDCounter: settingDDCounter,
       }}

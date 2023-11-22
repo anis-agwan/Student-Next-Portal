@@ -6,7 +6,7 @@ import { QNumberGrid } from "@/app/components/QuestionNumberGrid/QNumberGrid";
 import { DD_INPUTS } from "@/app/enums/dd_input";
 import { SECTION } from "@/app/enums/section_enums";
 import { QuestionContext } from "@/app/store/questions-context";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 export default function QuestionsPage({ searchParams }) {
   const section = searchParams.section;
@@ -27,8 +27,12 @@ export default function QuestionsPage({ searchParams }) {
   const [formValues, setFormValues] = useState([{ rank: "Rank1", value: "" }]);
   const [ratingFormValues, setRatingFormValues] = useState([]);
 
+  const [rankArr, setRankArr] = useState([""]);
+  const [rateArr, setRateArr] = useState([""]);
+
   const handleFormChange = (event, idx, whichOP) => {
-    console.log(event.target.value, idx);
+    // console.log(rankArr, rateArr);
+    console.log(questionCtx.ddAnswers);
     if (formValues.length === optCount) {
       if (ratingFormValues.length === 0) {
         addRatingFields(-1);
@@ -46,17 +50,46 @@ export default function QuestionsPage({ searchParams }) {
     }
 
     if (whichOP === DD_INPUTS.RANKSR) {
+      // questionCtx.setDDQStatus(idx);
+      let prevRankArr = rankArr;
+      prevRankArr[idx] = event.target.value;
+      setRankArr(prevRankArr);
       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RANKSR);
     } else if (whichOP === DD_INPUTS.RATESR) {
+      // questionCtx.setDDQStatus(idx);
+      let prevRateArr = rateArr;
+      prevRateArr[idx] = event.target.value;
+      setRateArr(prevRateArr);
       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RATESR);
     }
   };
 
+  const ratingCheck = (rateArr) => {
+    console.log(rateArr);
+    for (let i = 1; i < rateArr.length; i++) {
+      if (rateArr[i - 1] < rateArr[i]) {
+        // console.log("Rating "+[i]+" less than Rating "+[i+1]+" which is Invalid!\n");
+        return true;
+      }
+      return false;
+    }
+  };
+
+  const duplicatesCheck = (rankArr) => {
+    if (rankArr.length !== new Set(rankArr).size) {
+      return true;
+    }
+
+    return false;
+  };
+
   const addFields = (idx) => {
+    setRankArr([...rankArr, ""]);
     setFormValues([...formValues, { rank: `Rank${idx + 2}`, value: "" }]);
   };
 
   const addRatingFields = (idx) => {
+    setRateArr([...rateArr, ""]);
     setRatingFormValues([
       ...ratingFormValues,
       { rating: `Rating${idx + 2}`, value: "" },
@@ -95,10 +128,12 @@ export default function QuestionsPage({ searchParams }) {
     setLoadingData(true);
     console.log(questionCtx.ddQuestions);
     setQuestions(questionCtx.ddQuestions);
+
     try {
       const size = Object.keys(questions).length;
       console.log("NO OF QUES: ", size);
       setNoOfQuestions(size);
+      questionCtx.createDDQStatus(size);
     } catch (err) {
       console.log(err);
     }
@@ -106,20 +141,54 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   const nextBtnHandler = () => {
+    // console.log(rankArr, rateArr);
     if (section === SECTION.PB) {
       setSubmitBtnDisabled(questionCtx.pbStatusComplete);
     } else if (section === SECTION.CT) {
       setSubmitBtnDisabled(questionCtx.ctStatusComplete);
     }
-    console.log(questionNo + 1, noOfQuestions);
+    if (
+      section === SECTION.DD &&
+      !(rankArr.includes(0) || rankArr.includes("")) &&
+      !(rateArr.includes(0) || rateArr.includes(""))
+    ) {
+      if (!(ratingCheck(rateArr) || duplicatesCheck(rankArr))) {
+        questionCtx.setDDCounter(optCount, "next", noOfQuestions);
+        setRankArr([]);
+        setRateArr([]);
+        setFormValues([{ rank: "Rank1", value: "" }]);
+        setRatingFormValues([]);
+        console.log(questionNo);
+        questionCtx.setDDQStatus(questionNo);
+      } else {
+        alert(
+          "Invalid Rating or Rank (Rating should be unique with correct options and Rank should be in descending order)"
+        );
+        // throw new Error(
+        //   "Invalid Rating or Rank (Rating should be unique with correct options and Rank should be in descending order)"
+        // );
+        return;
+      }
+      // return;
+    } else {
+      alert("Please fill all the options");
+      return;
+    }
+    // console.log(questionNo + 1, noOfQuestions);
+    // console.log(questionNo, noOfQuestions);
+    console.log(questionCtx.ddQuestionStatus);
+    console.log(questionCtx.ddStatusComplete);
+    if (section === SECTION.DD && questionNo + 1 === noOfQuestions) {
+      // console.log(questionCtx.ddAnswers);
+      questionCtx.setDDQStatus(questionNo);
+      console.log(questionCtx.ddQuestionStatus);
+      console.log(questionCtx.ddStatusComplete);
+      if (!questionCtx.ddQuestionStatus.includes(0)) {
+        setSubmitBtnDisabled(false);
+      }
+    }
     if (questionNo + 1 < noOfQuestions) {
       setQuestionNo(questionNo + 1);
-      // if (questionNo + 1 >= noOfQuestions) {
-      //   console.log("NOO");
-      //   setBtnDisabled(true);
-      // } else {
-      //   setBtnDisabled(false);
-      // }
       setPrevBtnDisabled(false);
       setNextBtnDisabled(false);
     } else {
@@ -132,12 +201,6 @@ export default function QuestionsPage({ searchParams }) {
     } else {
       const newProgress = Math.floor(((questionNo + 1) / noOfQuestions) * 100);
       setProgress(newProgress);
-    }
-
-    if (section === SECTION.DD) {
-      questionCtx.setDDCounter(optCount, "next", noOfQuestions);
-      setFormValues([{ rank: "Rank1", value: "" }]);
-      setRatingFormValues([]);
     }
   };
 
@@ -153,21 +216,23 @@ export default function QuestionsPage({ searchParams }) {
       // }
       setPrevBtnDisabled(false);
       setNextBtnDisabled(false);
+
+      if (section === SECTION.DD) {
+        questionCtx.setDDCounter(optCount, "prev");
+        setFormValues([{ rank: "Rank1", value: "" }]);
+        setRatingFormValues([]);
+      }
     } else {
       setPrevBtnDisabled(true);
       setNextBtnDisabled(false);
-    }
-
-    if (section === SECTION.DD) {
-      questionCtx.setDDCounter(optCount, "prev");
-      setFormValues([{ rank: "Rank1", value: "" }]);
-      setRatingFormValues([]);
     }
   };
 
   const getOptionsCount = (val) => {
     // console.log(val);
     setOPCount(val);
+
+    // const arr = Array(val).fill(0);
   };
 
   useEffect(() => {
@@ -186,6 +251,8 @@ export default function QuestionsPage({ searchParams }) {
       getDD();
       setLoadingData(false);
     }
+
+    // console.log(rankArr, rateArr);
 
     // console.log(questions);
     // console.log(questionNo);

@@ -5,6 +5,8 @@ import { StartButton } from "../Buttons/StartButton/StartButton";
 import { QuestionContext } from "@/app/store/questions-context";
 import { SECTION } from "@/app/enums/section_enums";
 import { RateInputField } from "./RatinInputField/RateInputField";
+import { AuthContext } from "@/app/store/auth-context";
+import { useRouter } from "next/navigation";
 
 export const Question = ({
   nextBtnHandler,
@@ -20,6 +22,8 @@ export const Question = ({
   handleFormChange,
 }) => {
   const questionCtx = useContext(QuestionContext);
+  const authCtx = useContext(AuthContext);
+  const router = useRouter();
 
   let question = null;
   if (section === SECTION.PB) {
@@ -84,6 +88,17 @@ export const Question = ({
     // console.log(questionOptions);
     // console.log(questionOptions.length);
   }
+
+  const onSubmitAnswers = () => {
+    questionCtx
+      .submitDDAnswers()
+      .then((res) => {
+        router.push("EndScreen");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     // console.log(question);
@@ -243,7 +258,7 @@ export const Question = ({
           <StartButton buttonText={"Next"} isBtnDisabled={isNextBtnDisabled} />
         </div>
         {section === SECTION.DD && (
-          <div onClick={prevBtnHandler}>
+          <div onClick={onSubmitAnswers}>
             <StartButton
               buttonText={"Submit"}
               isBtnDisabled={isSubmitBtnDisabled}
