@@ -89,8 +89,15 @@ export const Question = ({
     // console.log(questionOptions.length);
   }
 
-  const onSubmitAnswers = () => {
-    questionCtx
+  const onSubmitAnswers = async () => {
+    await authCtx
+      .onUpdateStats()
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+
+    await questionCtx
       .submitDDAnswers()
       .then((res) => {
         router.push("EndScreen");
