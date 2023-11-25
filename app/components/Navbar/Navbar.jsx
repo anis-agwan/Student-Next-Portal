@@ -45,7 +45,7 @@ import { AuthContext } from "@/app/store/auth-context";
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuActive, setMenuActive] = useState(false);
-  const user = JSON.parse(localStorage.getItem("userDetails"));
+  const [user, setUser] = useState({});
   const authCtx = useContext(AuthContext);
   const router = useRouter();
 
@@ -54,8 +54,9 @@ export const Navbar = () => {
   // });
 
   useEffect(() => {
-    console.log(authCtx.isLoggedIn);
-    if (authCtx.isLoggedIn) {
+    console.log(authCtx.user);
+    if (authCtx.isLoggedIn && authCtx.user) {
+      setUser(authCtx.user);
       setIsLoggedIn(true);
     }
   });
@@ -96,18 +97,18 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed flex h-2/12 w-full bg-binghamton-green p-2 z-10">
+      <nav className="fixed flex h-fit w-full bg-binghamton-green justify-between py-2 px-10 z-10">
         <div>
           <Image
             src={BULogo}
             alt="BULogo"
-            className="flex w-1/3 h-auto"
+            className="flex w-5/12 h-auto"
             onClick={imgClick}
           />
         </div>
         {isLoggedIn && (
           <div
-            className="flex justify-end w-auto"
+            className="flex"
             // ref={(el) => {
             //   domNode.current = el;
             // }}
@@ -116,11 +117,11 @@ export const Navbar = () => {
               <div className="menuStyle">
                 {user && (
                   <div className="Dropdownlabel">
-                    {user.firstName + " " + user.lastName}
+                    {/* {user.firstName + " " + user.lastName} */}
                   </div>
                 )}
                 <div className="Dropdownlabel">
-                  {/* {user.firstName + " " + user.lastName} */}
+                  {user.firstName + " " + user.lastName}
                 </div>
                 {/* <button onClick={profileRoute} className="ProfileBtn">
                 Profile
@@ -150,10 +151,10 @@ export const Navbar = () => {
                 </button>
               </div>
             </div>
-            <div>
+            <div className="flex justify-end pe-8">
               <Image
                 src={Avatar}
-                className=" w-1/6"
+                className=" w-1/5 "
                 alt="avatar"
                 onClick={() => {
                   setMenuActive(!isMenuActive);

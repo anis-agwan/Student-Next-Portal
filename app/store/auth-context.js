@@ -6,6 +6,7 @@ import { USER_ROLE } from "../enums/role_enums";
 
 export const AuthContext = createContext({
   isLoggedIn: false,
+  user: {},
   onLogout: () => {},
   onLogin: (userName, password) => {},
   onSetLogin: () => {},
@@ -22,10 +23,15 @@ export const AuthContextProvider = ({ children }) => {
   const baseURL = "http://3.13.110.40:8080/login-register/";
 
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
   const [signUpStuData, setSignUpStudentData] = useState({});
 
   useEffect(() => {
     const storedUserLoggedInInfo = localStorage.getItem("isLoggedIn");
+    const user = JSON.parse(localStorage.getItem("userDetails"));
+
+    // console.log(user);
+    setUser(user);
 
     if (storedUserLoggedInInfo === "1") {
       setLoggedIn(true);
@@ -46,7 +52,7 @@ export const AuthContextProvider = ({ children }) => {
       password: password,
     };
 
-    console.log(user);
+    // console.log(user);
 
     let islog = false;
 
@@ -73,6 +79,7 @@ export const AuthContextProvider = ({ children }) => {
         }
         localStorage.setItem("userDetails", JSON.stringify(data));
         localStorage.setItem("isLoggedIn", "1");
+        setUser(data);
         setLoggedIn(true);
         islog = true;
       }
@@ -333,6 +340,7 @@ export const AuthContextProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         isLoggedIn: isLoggedIn,
+        user: user,
         onLogout: logoutHandler,
         onLogin: loginHandler,
         onSetLogin: isLoginHandler,
