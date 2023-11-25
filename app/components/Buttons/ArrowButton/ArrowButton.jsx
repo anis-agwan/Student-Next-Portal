@@ -6,7 +6,7 @@ import "./ArrowButton.css";
 export const ArrowButton = () => {
   return (
     <div className="startBtn">
-      <button className="startTxt" type="submit" value=">"></button>
+      <button className="startTxt" type="submit"></button>
     </div>
   );
 };

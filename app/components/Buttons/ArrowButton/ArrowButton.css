@@ -3,11 +3,16 @@
   justify-content: center;
   align-items: center;
   flex: 1;
-  width: 80px; /* Set the width and height to control the size of the circle */
-  height: 80px;
+  width: 6vw; /* Set the width and height to control the size of the circle */
+  height: 6vw;
   align-self: center;
   border-radius: 50%;
   background: #22856a;
+}
+
+.startBtn:hover {
+  background: rgba(28, 83, 56, 0.9);
+  color: rgba(223, 223, 223, 0.9);
 }
 
 .startTxt {
