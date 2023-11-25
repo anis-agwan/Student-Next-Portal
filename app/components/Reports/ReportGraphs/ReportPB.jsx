@@ -103,6 +103,33 @@ export const ReportPB = () => {
       min: 0,
       stepSize: 1,
     },
+    scales: {
+      r: {
+        pointLabels: {
+          font: {
+            size: 14,
+          },
+        },
+        ticks: {
+          // Include a dollar sign in the ticks
+          callback: function (value, index, ticks) {
+            console.log(value, index, ticks);
+
+            if (index === 0) {
+              return "Needs Development: " + value;
+            } else if (index === config.scale.max) {
+              return "Excellent: " + value;
+            } else {
+              return value;
+            }
+
+            // return "$" + value;
+          },
+          z: 1,
+          align: "start",
+        },
+      },
+    },
     plugins: {
       legend: false,
       tooltip: {
@@ -139,7 +166,7 @@ export const ReportPB = () => {
               <div className="w-10/12">
                 <Radar data={pbData.Data} options={config} />
               </div>
-              <div className="flex flex-col w-full px-4 pb-4">
+              <div className="flex flex-col w-full px-6 pb-4">
                 <ol type="1">
                   {comments.map((e, idx) => {
                     return (

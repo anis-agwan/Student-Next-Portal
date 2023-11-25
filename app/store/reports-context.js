@@ -8,6 +8,7 @@ export const ReportContext = createContext({
   graphState: null,
   changeGraphState: () => {},
   getPBGraphData: () => {},
+  getCTGraphData: () => {},
 });
 
 export const ReportContextProvider = ({ children }) => {
@@ -47,12 +48,36 @@ export const ReportContextProvider = ({ children }) => {
     }
   };
 
+  const gettingCTGraphData = async () => {
+    try {
+      const res = await fetch(
+        `${basePBCT}:8442/critical-thinking/critical-thinking/getScores/${user.bingNumber}`
+      );
+
+      let data = {};
+      await res
+        .json()
+        .then((r) => {
+          // console.log(r);
+          data = r;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ReportContext.Provider
       value={{
         graphState: stateOfGraph,
         changeGraphState: changingState,
         getPBGraphData: gettingPBGraphData,
+        getCTGraphData: gettingCTGraphData,
       }}
     >
       {children}

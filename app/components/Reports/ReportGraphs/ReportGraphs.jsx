@@ -26,12 +26,12 @@ export const ReportGraphs = ({ section }) => {
         </div>
       )}
       {section === SECTION.CT && (
-        <div>
+        <div className="flex w-full h-full">
           <ReportCT />
         </div>
       )}
       {section === SECTION.DD && (
-        <div>
+        <div className="flex w-full h-full">
           <ReportDD />
         </div>
       )}

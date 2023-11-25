@@ -16,7 +16,7 @@ export default function Reports() {
   return (
     <ReportContextProvider>
       <div className="flex min-h-screen justify-center items-center text-black pt-14">
-        <div className="flex flex-col h-full w-full  px-8 gap-2">
+        <div className="flex flex-col h-full w-full px-8 gap-2 pb-8">
           <div>
             <h2 className="sectionTitle">Reports</h2>
           </div>
