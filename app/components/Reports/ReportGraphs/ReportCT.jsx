@@ -44,25 +44,29 @@ export const ReportCT = () => {
                 // data[0] > 6 ? ("green rgba(89, 247, 108, 0.8)") :((data[0] < 6 && data[0] > 3) ? (" yellow rgba(227, 247, 88, 0.8)") : ("orange rgba(255, 106, 31, 0.8)") ),
 
                 //First Bar
-                r.sec1AnalysisScore > 6
-                  ? "rgba(89, 247, 108, 0.8)"
-                  : r.sec1AnalysisScore < 6 && r.sec1AnalysisScore > 3
-                  ? "rgba(227, 247, 88, 0.8)"
-                  : "rgba(255, 106, 31, 0.8)",
+                "rgba(255, 45, 45, 0.8)",
+                // r.sec1AnalysisScore > 6
+                //   ? "rgba(89, 247, 108, 0.8)"
+                //   : r.sec1AnalysisScore < 6 && r.sec1AnalysisScore > 3
+                //   ? "rgba(227, 247, 88, 0.8)"
+                //   : "rgba(255, 106, 31, 0.8)",
 
                 //Second Bar
-                r.sec2ConnectionsScore > 6
-                  ? "rgba(89, 247, 108, 0.8)"
-                  : r.sec2ConnectionsScore <= 6 && r.sec2ConnectionsScore > 3
-                  ? "rgba(227, 247, 88, 0.8)"
-                  : "rgba(255, 106, 31, 0.8)",
+                "rgba(227, 247, 88, 0.8)",
+                // r.sec2ConnectionsScore > 6
+                //   ? "rgba(89, 247, 108, 0.8)"
+                //   : r.sec2ConnectionsScore <= 6 && r.sec2ConnectionsScore > 3
+                //   ? "rgba(227, 247, 88, 0.8)"
+                //   : "rgba(255, 106, 31, 0.8)",
 
                 //Third Bar
-                r.sec3DepthScore > 6
-                  ? "rgba(89, 247, 108, 0.8)"
-                  : r.sec3DepthScore <= 6 && r.sec3DepthScore > 3
-                  ? "rgba(227, 247, 88, 0.8)"
-                  : "rgba(255, 106, 31, 0.8)",
+                "rgba(45, 154, 255, 0.8)",
+
+                // r.sec3DepthScore > 6
+                //   ? "rgba(89, 247, 108, 0.8)"
+                //   : r.sec3DepthScore <= 6 && r.sec3DepthScore > 3
+                //   ? "rgba(227, 247, 88, 0.8)"
+                //   : "rgba(255, 106, 31, 0.8)",
               ],
               borderColor: "rgba(0,0,0,1)",
               borderWidth: 2,

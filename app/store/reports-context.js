@@ -9,6 +9,7 @@ export const ReportContext = createContext({
   changeGraphState: () => {},
   getPBGraphData: () => {},
   getCTGraphData: () => {},
+  getDDGraphData: () => {},
 });
 
 export const ReportContextProvider = ({ children }) => {
@@ -48,6 +49,33 @@ export const ReportContextProvider = ({ children }) => {
     }
   };
 
+  const gettingDDGraphData = async () => {
+    try {
+      const rankRes = await fetch(
+        `${baseDDBI}:8443/situation_q/sq/getRankScores/${user.bingNumber}`
+      );
+      const rateRes = await fetch(
+        `${baseDDBI}:8443/situation_q/sq/getRateScores/${user.bingNumber}`
+      );
+
+      let data = {};
+
+      await rankRes.json().then((res) => {
+        data["rankData"] = res;
+      });
+
+      await rateRes.json().then((res) => {
+        data["rateData"] = res;
+      });
+
+      // console.log(data);
+
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const gettingCTGraphData = async () => {
     try {
       const res = await fetch(
@@ -78,6 +106,7 @@ export const ReportContextProvider = ({ children }) => {
         changeGraphState: changingState,
         getPBGraphData: gettingPBGraphData,
         getCTGraphData: gettingCTGraphData,
+        getDDGraphData: gettingDDGraphData,
       }}
     >
       {children}
