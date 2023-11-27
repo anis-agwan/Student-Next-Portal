@@ -4,8 +4,9 @@ import "./Login.css";
 import { AuthButton } from "../../Buttons/AuthButton/AuthButton";
 import { passwordReducer } from "./AuthReducers";
 import { AuthContext } from "@/app/store/auth-context";
+import { AUTHSTATE } from "@/app/enums/auth_state";
 
-export const NewPassForm = () => {
+export const NewPassForm = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
 
   console.log(authCtx.signUpStudentData);
@@ -53,9 +54,20 @@ export const NewPassForm = () => {
     };
   }, [[isPassValid, enteredPassword, enteredConfirmPassword]]);
 
-  const onNewPassSubmit = (event) => {
+  const onNewPassSubmit = async (event) => {
     event.preventDefault();
-    authCtx.onNewPassSubmit();
+    await authCtx
+      .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
+      .then((r) => {
+        if (r === true) {
+          handleState(AUTHSTATE.LOGIN);
+        } else {
+          throw new Error("Password did not change");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

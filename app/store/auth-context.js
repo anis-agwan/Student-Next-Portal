@@ -268,6 +268,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const registerNewPassword = async (email, password) => {
+    console.log(email, password);
     const url = `${baseURL}login/newPassword`;
     const user = {
       email: email,
@@ -275,7 +276,6 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     let registeredValid = false;
-
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -286,10 +286,18 @@ export const AuthContextProvider = ({ children }) => {
       });
       console.log(res);
       const data = res.json();
+      await data.then((r) => {
+        alert(r.message);
+      });
+      registeredValid = true;
+      // console.log(data);
     } catch (err) {
+      registeredValid = false;
       console.log(err);
       alert(err);
     }
+
+    // console.log(registeredValid);
 
     // await axios
     //   .post(url, user)
