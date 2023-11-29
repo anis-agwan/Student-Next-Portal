@@ -40,11 +40,12 @@ export const ReportContextProvider = ({ children }) => {
       await res
         .json()
         .then((rdata) => {
-          // console.log(rdata);
+          console.log(rdata);
           data = rdata;
         })
         .catch((err) => {
-          throw new Error(err);
+          // throw new Error(err);
+          console.log(err);
         });
 
       // return res.json();
@@ -68,7 +69,8 @@ export const ReportContextProvider = ({ children }) => {
           data = r;
         })
         .catch((err) => {
-          throw new Error(err);
+          // throw new Error(err);
+          console.log(err);
         });
 
       return data;

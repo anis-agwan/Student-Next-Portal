@@ -32,6 +32,13 @@ export const ReportPB = () => {
   const getPBData = async () => {
     setLoading(true);
     await reportCtx.getPBGraphData().then((res) => {
+      console.log();
+
+      if (Object.keys(res).length === 0) {
+        setPBData({});
+        return;
+      }
+
       let data = {
         Data: {
           labels: [
@@ -114,7 +121,7 @@ export const ReportPB = () => {
         ticks: {
           // Include a dollar sign in the ticks
           callback: function (value, index, ticks) {
-            console.log(value, index, ticks);
+            // console.log(value, index, ticks);
 
             if (index === 0) {
               return "Needs Development: " + value;
@@ -193,21 +200,5 @@ export const ReportPB = () => {
         </>
       )}
     </div>
-    // <div>
-    //   <div className="flex w-full h-full">
-    //     <div>
-
-    //     </div>
-    //     {/* <div className="w-1/3">
-    //       {pbData.comments.map((comm, idx) => {
-    //         return (
-    //           <>
-    //             <h3 key={idx}>{comm}</h3>
-    //           </>
-    //         );
-    //       })}
-    //     </div> */}
-    //   </div>
-    // </div>
   );
 };

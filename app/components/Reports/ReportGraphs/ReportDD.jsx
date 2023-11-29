@@ -35,6 +35,11 @@ export const ReportDD = () => {
     setLoading(true);
     await reportCtx.getDDGraphData().then((res) => {
       console.log(res);
+      if (res === undefined) {
+        setDDData({});
+        return;
+      }
+
       let data = {
         Data: {
           labels: ["Rank Score", "Rate Score"],

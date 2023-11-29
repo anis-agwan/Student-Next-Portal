@@ -30,6 +30,11 @@ export const ReportCT = () => {
     setLoading(true);
     await reportCtx.getCTGraphData().then((r) => {
       // console.log(r);
+      if (Object.keys(r).length === 0) {
+        setCTData({});
+        return;
+      }
+
       let data = {
         Data: {
           labels: ["Decisiveness", "Reasoning", "Analysis"],
