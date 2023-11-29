@@ -90,17 +90,12 @@ export const Question = ({
   }
 
   const onSubmitAnswers = async () => {
-    await authCtx
-      .onUpdateStats()
-      .then(() => {})
-      .catch((err) => {
-        console.log(err);
-      });
+    await authCtx.onUpdateStats(section);
 
     await questionCtx
       .submitDDAnswers()
       .then((res) => {
-        router.push("/EndScreen");
+        router.push("/Quiz/EndScreen");
       })
       .catch((err) => {
         console.log(err);

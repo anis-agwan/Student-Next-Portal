@@ -179,7 +179,7 @@ export const QuestionContextProvider = ({ children }) => {
     setDDQStatus(prevArr);
     setDDCompleteStatus(ddQuestionStatus.includes(0));
 
-    // console.log(prevArr);
+    console.log(prevArr);
 
     // setDDCompleteStatus(comp);
   };
