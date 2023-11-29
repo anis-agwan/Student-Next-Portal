@@ -1,5 +1,5 @@
 "use client";
-import { Login } from "./components/Authtentication/AuthForms/Login";
+
 import { AuthForm } from "./components/Authtentication/AuthForms/AuthForm";
 import { AuthImage } from "./components/Authtentication/AuthImage";
 import { useContext, useEffect } from "react";

@@ -6,6 +6,11 @@ import { QuestionContextProvider } from "./store/questions-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+  title: "SOM Assessment",
+  description: "A psychological assessment for MBA students.",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

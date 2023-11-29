@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { AuthContext } from "./auth-context";
 
@@ -16,8 +16,13 @@ export const ReportContextProvider = ({ children }) => {
   const authCtx = useContext(AuthContext);
   const basePBCT = "http://3.14.232.42";
   const baseDDBI = "http://3.14.159.174";
-  const user = JSON.parse(localStorage.getItem("userDetails"));
+  const [user, setUser] = useState();
   const [stateOfGraph, setGraphState] = useState(null);
+
+  useEffect(() => {
+    const u = JSON.parse(localStorage.getItem("userDetails"));
+    setUser(u);
+  }, []);
 
   const changingState = (section) => {
     // console.log(stateOfGraph);
@@ -49,6 +54,29 @@ export const ReportContextProvider = ({ children }) => {
     }
   };
 
+  const gettingCTGraphData = async () => {
+    try {
+      const res = await fetch(
+        `${basePBCT}:8442/critical-thinking/critical-thinking/getScores/${user.bingNumber}`
+      );
+
+      let data = {};
+      await res
+        .json()
+        .then((r) => {
+          // console.log(r);
+          data = r;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const gettingDDGraphData = async () => {
     try {
       const rankRes = await fetch(
@@ -69,29 +97,6 @@ export const ReportContextProvider = ({ children }) => {
       });
 
       // console.log(data);
-
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const gettingCTGraphData = async () => {
-    try {
-      const res = await fetch(
-        `${basePBCT}:8442/critical-thinking/critical-thinking/getScores/${user.bingNumber}`
-      );
-
-      let data = {};
-      await res
-        .json()
-        .then((r) => {
-          // console.log(r);
-          data = r;
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
 
       return data;
     } catch (err) {

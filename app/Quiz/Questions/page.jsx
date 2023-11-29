@@ -147,6 +147,7 @@ export default function QuestionsPage({ searchParams }) {
     } else if (section === SECTION.CT) {
       setSubmitBtnDisabled(questionCtx.ctStatusComplete);
     }
+
     if (
       section === SECTION.DD &&
       !(rankArr.includes(0) || rankArr.includes("")) &&
@@ -170,10 +171,13 @@ export default function QuestionsPage({ searchParams }) {
         return;
       }
       // return;
-    } else {
-      alert("Please fill all the options");
-      return;
     }
+
+    // else {
+    //   alert("Please fill all the options");
+    //   return;
+    // }
+
     // console.log(questionNo + 1, noOfQuestions);
     // console.log(questionNo, noOfQuestions);
     console.log(questionCtx.ddQuestionStatus);

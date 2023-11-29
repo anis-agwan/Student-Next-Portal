@@ -100,7 +100,7 @@ export const Question = ({
     await questionCtx
       .submitDDAnswers()
       .then((res) => {
-        router.push("EndScreen");
+        router.push("/EndScreen");
       })
       .catch((err) => {
         console.log(err);

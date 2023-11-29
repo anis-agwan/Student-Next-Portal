@@ -33,7 +33,7 @@ export const QNumberGrid = ({
       questionCtx
         .submitPBAnswers()
         .then(() => {
-          router.push("Quiz/EndScreen");
+          router.push("EndScreen");
         })
         .catch((err) => {
           console.log(err);
