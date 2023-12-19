@@ -11,8 +11,14 @@ export const RateInputField = ({
 }) => {
   return (
     <>
+      <div>
+        <div>Scale</div>
+      </div>
       <div className="flex w-full gap-14">
         <div className="flex flex-col gap-2">
+          <div>
+            <h4>Ranking: 1 = highest and {noOfOptions} = lowest</h4>
+          </div>
           {formValues.map((elem, idx) => {
             return (
               <div key={idx} className="inputDiv flex gap-3">
@@ -32,6 +38,9 @@ export const RateInputField = ({
         </div>
         {ratingFormValues.length > 0 && (
           <div className="flex flex-col gap-2">
+            <div>
+              <h4>Rating: 1 = satisfied and {noOfOptions} = not satisfied </h4>
+            </div>
             {ratingFormValues.length > 0 &&
               ratingFormValues.map((elem, idx) => {
                 return (

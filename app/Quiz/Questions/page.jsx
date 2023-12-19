@@ -163,7 +163,7 @@ export default function QuestionsPage({ searchParams }) {
         questionCtx.setDDQStatus(questionNo);
       } else {
         alert(
-          "Invalid Rating or Rank (Rating should be unique with correct options and Rank should be in descending order)"
+          "Invalid: Rank (Ranking should be unique with correct options and should be in descending order)"
         );
         // throw new Error(
         //   "Invalid Rating or Rank (Rating should be unique with correct options and Rank should be in descending order)"
