@@ -15,6 +15,9 @@ export default function SelectionScreen() {
         <div>
           <Card section={SECTION.DD} />
         </div>
+        <div>
+          <Card section={SECTION.BI} />
+        </div>
       </div>
     </div>
   );

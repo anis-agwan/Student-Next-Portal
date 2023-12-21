@@ -23,6 +23,9 @@ export const Card = ({ section }) => {
         {section === SECTION.DD && (
           <Image src={juicy_business} alt="DD" className="cardImg" />
         )}
+        {section === SECTION.BI && (
+          <Image src={juicy_business} alt="DD" className="cardImg" />
+        )}
         <div className="flex flex-col items-center">
           {section === SECTION.PB && (
             <h1 className="title">Personal Beliefs</h1>
@@ -32,13 +35,30 @@ export const Card = ({ section }) => {
           )}
           {section === SECTION.DD && (
             <h1 className="title">Difficult Decisions</h1>
+          )}{" "}
+          {section === SECTION.BI && (
+            <h1 className="title">Behavioral Interview</h1>
           )}
-          <p className="description">
-            This section consists of a number of statements about various
-            issues. You need to select the extent to which you agree or disagree
-            with each statement. There are no right or wrong answers in this
-            section. You should respond accurately and candidly.
-          </p>
+          {section === SECTION.BI ? (
+            <>
+              <p className="description">
+                This section has a guide that features two behavioral interview
+                simulations with no right or wrong answers. Feel free to
+                structure the meeting and facility as you see fit. Respond
+                candidly to showcase your abilities
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="description">
+                This section consists of a number of statements about various
+                issues. You need to select the extent to which you agree or
+                disagree with each statement. There are no right or wrong
+                answers in this section. You should respond accurately and
+                candidly.
+              </p>
+            </>
+          )}
           {section === SECTION.PB && (
             <Link
               href={{
@@ -52,7 +72,6 @@ export const Card = ({ section }) => {
               <ArrowButton />
             </Link>
           )}
-
           {section === SECTION.CT && (
             <Link
               href={{
@@ -65,13 +84,24 @@ export const Card = ({ section }) => {
               <ArrowButton />
             </Link>
           )}
-
           {section === SECTION.DD && (
             <Link
               href={{
                 pathname: "/Quiz/QuizInstruction",
                 query: {
                   section: SECTION.DD,
+                },
+              }}
+            >
+              <ArrowButton />
+            </Link>
+          )}
+          {section === SECTION.BI && (
+            <Link
+              href={{
+                pathname: "/Quiz/BIGuide",
+                query: {
+                  section: SECTION.BI,
                 },
               }}
             >

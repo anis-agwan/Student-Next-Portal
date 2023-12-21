@@ -29,10 +29,10 @@
   font-family: "Lato";
   font-style: normal;
   font-weight: 600;
-  font-size: 2vw;
+  font-size: 1.6vw;
 
-  letter-spacing: 0.065em;
-  padding: 10px;
+  letter-spacing: 0.06em;
+  padding: 8;
 
   color: #000000;
 }
@@ -43,7 +43,7 @@
   font-family: "Lato";
   font-style: normal;
   font-weight: 400;
-  font-size: 1.15vw;
+  font-size: 1.1vw;
   line-height: 1.4vw;
   padding: 18px;
 

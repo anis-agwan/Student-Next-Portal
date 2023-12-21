@@ -1,0 +1,44 @@
+.titleText {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 280%;
+  line-height: 48px;
+
+  color: #151515;
+}
+
+.sectionTitle {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 40px;
+
+  color: #000000;
+}
+
+.sectionSub {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 550;
+  font-size: 23px;
+  line-height: 35px;
+
+  color: #000000;
+}
+
+.instructionText {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 32px;
+
+  color: #000000;
+}
+
+ul {
+  display: block;
+  list-style-type: disc;
+}
