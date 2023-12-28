@@ -17,6 +17,8 @@ export const AuthContext = createContext({
   onUpdateStats: (email, section) => {},
   signUpStudentData: {},
   passStudentData: (student) => {},
+  didStudentComplete: () => {},
+  pdfStudentInfo: () => {},
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -344,6 +346,66 @@ export const AuthContextProvider = ({ children }) => {
     setSignUpStudentData(student);
   };
 
+  const studentDidComplete = async (bNum) => {
+    const url = `http://localhost:8080/login-register/login/getstudcomplete`;
+    const temp = `${baseURL}login/getstudcomplete`;
+    console.log(temp);
+    let user = {
+      bnumber: bNum,
+    };
+
+    let data = null;
+    try {
+      const res = await fetch(temp, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      data = await res.json().then((r) => {
+        return r;
+      });
+    } catch (err) {
+      console.log(err);
+      data = false;
+    }
+    console.log(data);
+    return data;
+  };
+
+  const pdfStudentInfo = async (bNum) => {
+    let cc = {};
+    try {
+      const url = `${baseURL}login/getUser/${bNum}`;
+      let data = false;
+      const res = await fetch(url);
+      // console.log(res);
+      await res
+        .json()
+        .then(async (r) => {
+          // data = true;
+
+          if (r.validationIndicator === "Valid") {
+            console.log(r);
+            // await setStudInfo(r);
+            cc = r;
+          } else {
+            // data = false;
+            alert("No such student exists");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      return cc;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -359,6 +421,8 @@ export const AuthContextProvider = ({ children }) => {
         onUpdateStats: updateStats,
         signUpStudentData: signUpStuData,
         passStudentData: studentDataHandler,
+        didStudentComplete: studentDidComplete,
+        pdfStudentInfo: pdfStudentInfo,
       }}
     >
       {children}

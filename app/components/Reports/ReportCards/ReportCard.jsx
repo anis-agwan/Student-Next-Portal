@@ -11,8 +11,10 @@ export const ReportCard = ({ section }) => {
     data = ReportData.pbCard;
   } else if (section === SECTION.CT) {
     data = ReportData.ctCard;
-  } else {
+  } else if (section === SECTION.DD) {
     data = ReportData.ddCard;
+  } else {
+    data = ReportData.biCard;
   }
 
   return (
@@ -21,7 +23,7 @@ export const ReportCard = ({ section }) => {
         <Image className="cardImg p-4" src={data.img.src} alt={data.img.alt} />
       </div>
       <div>
-        <h2 className="cardTitle">{data.title}</h2>
+        <h2 className="cardTitle px-4">{data.title}</h2>
       </div>
     </div>
   );

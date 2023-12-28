@@ -24,4 +24,11 @@ export const ReportData = {
       alt: "DDReportsImg",
     },
   },
+  biCard: {
+    title: "Complete Reports",
+    img: {
+      src: DDReportsGif,
+      alt: "DDReportsImg",
+    },
+  },
 };

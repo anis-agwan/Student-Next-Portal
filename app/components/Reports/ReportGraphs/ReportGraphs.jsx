@@ -4,6 +4,7 @@ import { ReportPB } from "./ReportPB";
 import { ReportCT } from "./ReportCT";
 import { ReportDD } from "./ReportDD";
 import { ReportContext } from "@/app/store/reports-context";
+import { ReportComplete } from "./ReportComplete";
 
 export const ReportGraphs = ({ section }) => {
   const reportCtx = useContext(ReportContext);
@@ -15,6 +16,8 @@ export const ReportGraphs = ({ section }) => {
       reportCtx.changeGraphState(SECTION.CT);
     } else if (section === SECTION.DD) {
       reportCtx.changeGraphState(SECTION.DD);
+    } else if (section === SECTION.BI) {
+      reportCtx.changeGraphState(SECTION.BI);
     }
   });
 
@@ -33,6 +36,11 @@ export const ReportGraphs = ({ section }) => {
       {section === SECTION.DD && (
         <div className="flex w-full h-full">
           <ReportDD />
+        </div>
+      )}
+      {section === SECTION.BI && (
+        <div className="flex w-full h-full">
+          <ReportComplete />
         </div>
       )}
     </div>

@@ -43,6 +43,13 @@ export default function Reports() {
               >
                 <ReportCard section={SECTION.DD} />
               </div>
+              <div
+                onClick={() => {
+                  setGraphState(SECTION.BI);
+                }}
+              >
+                <ReportCard section={SECTION.BI} />
+              </div>
             </div>
             <div className="rightSection flex items-center justify-center bg-white w-3/4  ">
               {graphState !== null ? (
