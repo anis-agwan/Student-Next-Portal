@@ -114,6 +114,10 @@ export const ReportDD = () => {
           align: "center",
         },
       },
+      secondXAxis: {
+        axis: "x",
+        labels: ["Judgement", "Consideration of Alternatives"],
+      },
     },
   };
 

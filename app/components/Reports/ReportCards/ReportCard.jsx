@@ -4,7 +4,7 @@ import { SECTION } from "@/app/enums/section_enums";
 import Image from "next/image";
 import "./ReportCard.css";
 
-export const ReportCard = ({ section }) => {
+export const ReportCard = ({ active, section }) => {
   let data = {};
 
   if (section === SECTION.PB) {
@@ -18,7 +18,11 @@ export const ReportCard = ({ section }) => {
   }
 
   return (
-    <div className="card bg-white flex items-center">
+    <div
+      className={`${
+        active ? "card-active" : "card"
+      } bg-white flex items-center px-4`}
+    >
       <div>
         <Image className="cardImg p-4" src={data.img.src} alt={data.img.alt} />
       </div>

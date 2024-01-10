@@ -8,6 +8,8 @@ import { ReportContext, ReportContextProvider } from "../store/reports-context";
 
 export default function Reports() {
   const [graphState, setGraphState] = useState(null);
+  const cards = [SECTION.PB, SECTION.CT, SECTION.DD, SECTION.BI];
+  const [chosen, setChosen] = useState();
 
   useEffect(() => {
     // console.log(graphState);
@@ -22,7 +24,20 @@ export default function Reports() {
           </div>
           <div className="flex gap-5">
             <div className="leftSection flex flex-col gap-5 w-1/4">
-              <div
+              {cards.map((card, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setGraphState(card);
+                      setChosen(card);
+                    }}
+                  >
+                    <ReportCard active={card === chosen} section={card} />
+                  </div>
+                );
+              })}
+              {/* <div
                 onClick={() => {
                   setGraphState(SECTION.PB);
                 }}
@@ -49,7 +64,7 @@ export default function Reports() {
                 }}
               >
                 <ReportCard section={SECTION.BI} />
-              </div>
+              </div> */}
             </div>
             <div className="rightSection flex items-center justify-center bg-white w-3/4  ">
               {graphState !== null ? (

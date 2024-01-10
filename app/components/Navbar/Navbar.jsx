@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 //Assets
 import Image from "next/image";
@@ -65,7 +66,8 @@ export const Navbar = () => {
     // let path = `/SelectionScreen`;
     setMenuActive(false);
     if (authCtx.isLoggedIn) {
-      router.push("SelectionScreen");
+      // router.push("SelectionScreen");
+      router.replace("/SelectionScreen");
     } else {
       router.push("/");
     }
@@ -74,9 +76,11 @@ export const Navbar = () => {
     setMenuActive(false);
     if (authCtx.isLoggedIn) {
       setMenuActive(false);
-      router.push("Reports");
+      // router.push("Reports");
+      router.replace("/Reports");
     } else {
-      router.push("/");
+      // router.push("/");
+      redirect("/");
     }
   };
 
@@ -134,7 +138,7 @@ export const Navbar = () => {
                     setMenuActive(false);
                   }}
                 >
-                  Dashboard
+                  Menu
                 </button>{" "}
                 {/* </Link> */}
                 <button
