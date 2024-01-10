@@ -141,11 +141,29 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   const nextBtnHandler = () => {
+    console.log(questionCtx.pbQuestionStatus);
+    console.log(questionNo);
     // console.log(rankArr, rateArr);
     if (section === SECTION.PB) {
+      if (questionCtx.pbQuestionStatus[questionNo] == 0) {
+        console.log("ZERO HAI BHAI");
+        alert("Please choose one option before moving forward.");
+        return;
+      }
       setSubmitBtnDisabled(questionCtx.pbStatusComplete);
     } else if (section === SECTION.CT) {
+      if (questionCtx.ctQuestionStatus[questionNo] == 0) {
+        console.log("ZERO HAI BHAI");
+        alert("Please choose one option before moving forward.");
+        return;
+      }
       setSubmitBtnDisabled(questionCtx.ctStatusComplete);
+    } else if (section === SECTION.DD) {
+      if (questionCtx.ddQuestionStatus[questionNo] == 0) {
+        console.log("ZERO HAI BHAI");
+        alert("Please answer before moving forward.");
+        return;
+      }
     }
 
     if (
@@ -180,8 +198,8 @@ export default function QuestionsPage({ searchParams }) {
 
     // console.log(questionNo + 1, noOfQuestions);
     // console.log(questionNo, noOfQuestions);
-    console.log(questionCtx.ddQuestionStatus);
-    console.log(questionCtx.ddStatusComplete);
+    // console.log(questionCtx.ddQuestionStatus);
+    // console.log(questionCtx.ddStatusComplete);
     if (section === SECTION.DD && questionNo + 1 === noOfQuestions) {
       // console.log(questionCtx.ddAnswers);
       questionCtx.setDDQStatus(questionNo);
