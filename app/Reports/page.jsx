@@ -32,6 +32,7 @@ export default function Reports() {
                       setGraphState(card);
                       setChosen(card);
                     }}
+                    className="w-full h-full"
                   >
                     <ReportCard active={card === chosen} section={card} />
                   </div>

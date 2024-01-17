@@ -20,7 +20,7 @@ export const ReportCard = ({ active, section }) => {
   return (
     <div
       className={`${
-        active ? "card-active" : "card"
+        active ? "card-active" : "card-not-active"
       } bg-white flex items-center px-4`}
     >
       <div>
