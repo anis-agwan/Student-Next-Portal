@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     width: "100%",
     fontSize: 10,
     textAlign: "right",
-    color: "#FA8D33",
+    color: "green",
   },
 });
 
