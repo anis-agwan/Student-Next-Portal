@@ -32,7 +32,9 @@ export default function QuestionsPage({ searchParams }) {
 
   const handleFormChange = (event, idx, whichOP) => {
     // console.log(rankArr, rateArr);
-    console.log(questionCtx.ddAnswers);
+    // console.log(questionCtx)
+    console.log(formValues)
+    // console.log(questionCtx.ddAnswers);
     if (formValues.length === optCount) {
       if (ratingFormValues.length === 0) {
         addRatingFields(-1);
@@ -54,6 +56,7 @@ export default function QuestionsPage({ searchParams }) {
       let prevRankArr = rankArr;
       prevRankArr[idx] = event.target.value;
       setRankArr(prevRankArr);
+      console.log(prevRankArr)
       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RANKSR);
     } else if (whichOP === DD_INPUTS.RATESR) {
       // questionCtx.setDDQStatus(idx);
@@ -62,6 +65,16 @@ export default function QuestionsPage({ searchParams }) {
       setRateArr(prevRateArr);
       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RATESR);
     }
+
+    if(rankArr.length >= optCount && rateArr.length >= optCount && !(rankArr.includes(0) || rateArr.includes(0) || rankArr.includes('') || rateArr.includes(''))) {
+      questionCtx.setDDQStatus(questionNo, "+")
+    }
+
+    // console.log(rankArr.length)
+    // console.log(rateArr.length)
+    // console.log(rankArr, rateArr)
+    // console.log(questionCtx.ddQuestionStatus)
+
   };
 
   const ratingCheck = (rateArr) => {
@@ -141,8 +154,8 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   const nextBtnHandler = () => {
-    console.log(questionCtx.pbQuestionStatus);
-    console.log(questionNo);
+    // console.log(questionCtx.pbQuestionStatus);
+    // console.log(questionNo);
     // console.log(rankArr, rateArr);
     if (section === SECTION.PB) {
       if (questionCtx.pbQuestionStatus[questionNo] == 0) {
@@ -160,7 +173,10 @@ export default function QuestionsPage({ searchParams }) {
       setSubmitBtnDisabled(questionCtx.ctStatusComplete);
     } else if (section === SECTION.DD) {
       if (questionCtx.ddQuestionStatus[questionNo] == 0) {
-        console.log("ZERO HAI BHAI");
+        console.log(questionCtx.ddQuestionStatus)
+        console.log(rankArr)
+        console.log(rateArr)
+        console.log("DD ZERO HAI BHAI");
         alert("Please answer before moving forward.");
         return;
       }
@@ -178,7 +194,7 @@ export default function QuestionsPage({ searchParams }) {
         setFormValues([{ rank: "Rank1", value: "" }]);
         setRatingFormValues([]);
         console.log(questionNo);
-        questionCtx.setDDQStatus(questionNo);
+        questionCtx.setDDQStatus(questionNo, "+");
       } else {
         alert(
           "Invalid: Rank (Ranking should be unique with correct options and should be in descending order)"
@@ -228,8 +244,10 @@ export default function QuestionsPage({ searchParams }) {
 
   const prevBtnHandler = () => {
     console.log(questionNo);
+    questionCtx.setDDQStatus(questionNo, "-")
     if (questionNo > 0) {
       setQuestionNo(questionNo - 1);
+      questionCtx.setDDQStatus(questionNo-1, "-")
       // if (questionNo - 1 <= 0) {
       //   console.log("NOO");
       //   setBtnDisabled(true);
@@ -251,7 +269,7 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   const getOptionsCount = (val) => {
-    // console.log(val);
+    console.log(val);
     setOPCount(val);
 
     // const arr = Array(val).fill(0);

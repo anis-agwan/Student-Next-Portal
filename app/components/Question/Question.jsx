@@ -222,6 +222,7 @@ export const Question = ({
             {questionOptions.map((q, idx) => {
               return (
                 <>
+                  <div >
                   <OptionsButton
                     key={idx + 1}
                     buttonText={`Option ${idx + 1}: ${q.value} `}
@@ -231,7 +232,9 @@ export const Question = ({
                     idx={questionNo}
                     answer={idx + 1}
                     className="text-xs"
+                    section={section}
                   />
+                  </div>
                 </>
               );
             })}

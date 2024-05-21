@@ -18,26 +18,26 @@ export const QuestionContext = createContext({
   pbAnswers: {},
   ctAnswers: {},
   ddAnswers: {},
-  getPBQuestion: () => {},
-  getCTQuestion: () => {},
-  getDDQuestion: () => {},
-  createPBQStatus: () => {},
-  createCTQStatus: () => {},
-  createDDQStatus: () => {},
-  setPBQStatus: () => {},
-  setCTQStatus: () => {},
-  setDDQStatus: () => {},
-  setPBData: ({}) => {},
-  setCTData: ({}) => {},
-  setDDData: ({}) => {},
-  setPBAnswer: (questionNo, answer) => {},
-  setCTAnswer: (questionNo, answer) => {},
-  setDDAnswer: (questionNo, opID, answer, whichInput) => {},
-  submitPBAnswers: () => {},
-  submitCTAnswers: () => {},
-  submitDDAnswers: () => {},
+  getPBQuestion: () => { },
+  getCTQuestion: () => { },
+  getDDQuestion: () => { },
+  createPBQStatus: () => { },
+  createCTQStatus: () => { },
+  createDDQStatus: () => { },
+  setPBQStatus: () => { },
+  setCTQStatus: () => { },
+  setDDQStatus: () => { },
+  setPBData: ({ }) => { },
+  setCTData: ({ }) => { },
+  setDDData: ({ }) => { },
+  setPBAnswer: (questionNo, answer) => { },
+  setCTAnswer: (questionNo, answer) => { },
+  setDDAnswer: (questionNo, opID, answer, whichInput) => { },
+  submitPBAnswers: () => { },
+  submitCTAnswers: () => { },
+  submitDDAnswers: () => { },
   ddCounter: 0,
-  setDDCounter: () => {},
+  setDDCounter: () => { },
 });
 
 export const QuestionContextProvider = ({ children }) => {
@@ -172,14 +172,29 @@ export const QuestionContextProvider = ({ children }) => {
     setCTCompleteStatus(ctQuestionStatus.includes(0));
   };
 
-  const settingDDQStatus = (idx) => {
-    let prevArr = ddQuestionStatus;
-    prevArr[idx] = 1;
+  const settingDDQStatus = (idx, whatToDo) => {
+    console.log(idx)
+    if(whatToDo === "+") {
+      let prevArr = ddQuestionStatus;
+      prevArr[idx] = 1;
+
+      console.log(prevArr)
+
+      setDDQStatus(prevArr);
+      setDDCompleteStatus(ddQuestionStatus.includes(0));
+
+      console.log(prevArr);
+    } else if (whatToDo === "-") {
+      let prevArr = ddQuestionStatus;
+    prevArr[idx] = 0;
+
+    console.log(prevArr)
 
     setDDQStatus(prevArr);
     setDDCompleteStatus(ddQuestionStatus.includes(0));
 
     console.log(prevArr);
+    }
 
     // setDDCompleteStatus(comp);
   };
