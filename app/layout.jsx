@@ -3,6 +3,7 @@ import "./globals.css";
 import { Navbar } from "./components/Navbar/Navbar";
 import { AuthContextProvider } from "./store/auth-context";
 import { QuestionContextProvider } from "./store/questions-context";
+import { Providers } from "./provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
         <AuthContextProvider>
           <div className="flex flex-col">
             <Navbar />
-            <QuestionContextProvider>{children}</QuestionContextProvider>
+            <QuestionContextProvider><Providers>{children}</Providers></QuestionContextProvider>
           </div>
         </AuthContextProvider>
       </body>

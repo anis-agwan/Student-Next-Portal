@@ -9,6 +9,9 @@ import { SECTIONTYPE } from "@/app/enums/section_type";
 import { ArrowButton } from "@/app/components/Buttons/ArrowButton/ArrowButton";
 import { AuthContext } from "@/app/store/auth-context";
 import { QuestionContext } from "@/app/store/questions-context";
+import { useDispatch } from "react-redux";
+import { fetchPBQuestions } from "@/app/redux-store/pbQuiz/pb-actions";
+import { fetchCTQuestions } from "@/app/redux-store/ctQuiz/ct-actions";
 
 const getInstData = (sectionName, type) => {
   if (sectionName === SECTION.PB) {
@@ -29,37 +32,36 @@ export default function QuizInstruction({ searchParams }) {
   const section = searchParams.section;
   const type = searchParams.type;
 
-  // const authCtx = useContext(AuthContext);
   const questionCtx = useContext(QuestionContext);
 
-  // const [questions, setQuestions] = useState();
-
   const data = getInstData(section, type);
-  // console.log(data);
+
+  const dispatch = useDispatch();
 
   const getQuestionsData = async (sectionName) => {
-    console.log("RUNNING");
     if (sectionName === SECTION.PB) {
-      console.log(questionCtx.pbQuestions);
-      if (questionCtx.pbQuestions === null) {
-        // setLoadingData(true);
-        try {
-          let data = {};
-          await questionCtx.getPBQuestion().then((res) => {
-            data = res;
-          });
+      // console.log(questionCtx.pbQuestions);
+      // if (questionCtx.pbQuestions === null) {
+      //   // setLoadingData(true);
+      //   try {
+      //     let data = {};
+      //     await questionCtx.getPBQuestion().then((res) => {
+      //       data = res;
+      //     });
 
-          // console.log(data);
+      //     // console.log(data);
 
-          questionCtx.setPBData(data);
-          questionCtx.createPBQStatus(Object.keys(data).length);
+      //     questionCtx.setPBData(data);
+      //     questionCtx.createPBQStatus(Object.keys(data).length);
 
-          // setQuestions(data);
-        } catch (err) {
-          console.log(err);
-        }
-      }
+      //     // setQuestions(data);
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // }
+      dispatch(fetchPBQuestions())
     } else if (sectionName === SECTION.CT) {
+      dispatch(fetchCTQuestions())
     } else if (sectionName === SECTION.DD) {
       console.log(questionCtx.ddQuestions);
       if (questionCtx.ddQuestions === null) {

@@ -6,6 +6,8 @@ import { QuestionContext } from "@/app/store/questions-context";
 import { AuthContext } from "@/app/store/auth-context";
 import { useRouter } from "next/navigation";
 import { SECTION } from "@/app/enums/section_enums";
+import { useDispatch, useSelector } from "react-redux";
+import { rdxSubmitPBAnswers } from "@/app/redux-store/pbQuiz/pb-actions";
 
 export const QNumberGrid = ({
   noOfQuestions,
@@ -19,25 +21,39 @@ export const QNumberGrid = ({
   let questionStatus = [];
 
   if (section === SECTION.PB) {
-    questionStatus = questionCtx.pbQuestionStatus;
+    console.log(isSubmitBtnDisabled)
+    questionStatus = useSelector((state) => state.pb.pbQuestionIdxStatus);
   } else if (section === SECTION.CT) {
     console.log(questionCtx.ctQuestionStatus);
     questionStatus = questionCtx.ctQuestionStatus;
   }
+
+  const dispatch = useDispatch();
+  const pbAnswers = useSelector((state) => state.pb.pbAnswers)
 
   // console.log(section);
 
   const submitAnswers = () => {
     authCtx.onUpdateStats(section);
     if (section === SECTION.PB) {
-      questionCtx
-        .submitPBAnswers()
-        .then(() => {
-          router.push("EndScreen");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // questionCtx
+      //   .submitPBAnswers()
+      //   .then(() => {
+      //     router.push("EndScreen");
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      if(!questionStatus.includes(0)) {
+        dispatch(
+          rdxSubmitPBAnswers(pbAnswers)
+        )
+        router.push("EndScreen");
+      } else {
+        alert("Please complete the assessment with all answers.");
+      }
+
+     
     } else if (section === SECTION.CT) {
       // console.log("CLICKS CT");
       questionCtx.submitCTAnswers().then((res) => {

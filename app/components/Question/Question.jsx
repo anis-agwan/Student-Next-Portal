@@ -7,6 +7,8 @@ import { SECTION } from "@/app/enums/section_enums";
 import { RateInputField } from "./RatinInputField/RateInputField";
 import { AuthContext } from "@/app/store/auth-context";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { pbActions } from "@/app/redux-store/pbQuiz/pb-slice";
 
 export const Question = ({
   nextBtnHandler,
@@ -24,12 +26,17 @@ export const Question = ({
   const questionCtx = useContext(QuestionContext);
   const authCtx = useContext(AuthContext);
   const router = useRouter();
+  const dispatch = useDispatch();
+  
 
   let question = null;
   if (section === SECTION.PB) {
-    question = questionCtx.pbQuestions[questionNo];
+    // question = questionCtx.pbQuestions[questionNo];
+    question = useSelector((state) => state.pb.pbQuestions[questionNo]);
+    
   } else if (section === SECTION.CT) {
-    question = questionCtx.ctQuestions[questionNo];
+    // question = questionCtx.ctQuestions[questionNo];
+    question = useSelector((state) => state.ct.ctQuestions[questionNo]);
   } else if (section === SECTION.DD) {
     question = questionCtx.ddQuestions[questionNo];
   }
@@ -113,8 +120,16 @@ export const Question = ({
   const ansButtonHandler = (idx, answer) => {
     // console.log("Q: ", idx + 1, " ANS: ", answer);
     if (section === SECTION.PB) {
-      questionCtx.setPBQStatus(idx);
-      questionCtx.setPBAnswer(idx, answer);
+      dispatch(pbActions.rdxChangePBIdxStatus({
+        idx: idx
+      }))
+      // questionCtx.setPBQStatus(idx);
+      dispatch(pbActions.rdxSetPBAnswers({
+        questionNo: idx,
+        answer: answer
+      }))
+      
+      // questionCtx.setPBAnswer(idx, answer);
     } else if (section === SECTION.CT) {
       // console.log(answer);
       questionCtx.setCTQStatus(idx);

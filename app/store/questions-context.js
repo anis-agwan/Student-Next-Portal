@@ -87,7 +87,7 @@ export const QuestionContextProvider = ({ children }) => {
       const res = await fetch(url);
 
       const data = await res.json();
-      // console.log(data);
+      console.log("DATATA: ", data);
 
       setPBQuestions(data);
 
@@ -125,6 +125,7 @@ export const QuestionContextProvider = ({ children }) => {
 
   const setPBData = (data) => {
     // console.log("IS WORKING");
+    // console.log("SETPBDATA:" ,data)
     setPBQuestions(data);
   };
 
