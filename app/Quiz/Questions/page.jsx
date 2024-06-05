@@ -12,14 +12,23 @@ import { useSelector } from "react-redux";
 export default function QuestionsPage({ searchParams }) {
   const section = searchParams.section;
   
+  //PB
   const pbQuestions = useSelector((state) => state.pb.pbQuestions);
   const pbQSize = useSelector((state) => state.pb.pbQuestionsLength);
   const pbQuestionIdxStatus = useSelector((state) => state.pb.pbQuestionIdxStatus);
   const pbQuizCompleteStatus = useSelector((state) => state.pb.pbQuizCompleteStatus)
 
+  //CT
   const ctQuestions = useSelector((state) => state.ct.ctQuestions);
   const ctQSize = useSelector((state) => state.ct.ctQuestionsLength);
+  const ctQuestionIdxStatus = useSelector((state) => state.ct.ctQuestionIdxStatus)
+  const ctQuizCompleteStatus = useSelector((state) => state.ct.ctQuizCompleteStatus)
+
   
+  //DD
+  const ddQuestions = useSelector((state) => state.dd.ddQuestions)
+  const ddSize = useSelector((state) => state.dd.ddQuestionsLength)
+
   const questionCtx = useContext(QuestionContext);
   const [questions, setQuestions] = useState();
   const [loadingData, setLoadingData] = useState(false);
@@ -152,30 +161,24 @@ export default function QuestionsPage({ searchParams }) {
 
   const getDD = async () => {
     setLoadingData(true);
-    console.log(questionCtx.ddQuestions);
-    setQuestions(questionCtx.ddQuestions);
+    // console.log(questionCtx.ddQuestions);
+    setQuestions(ddQuestions);
+    setNoOfQuestions(ddSize);
 
-    try {
-      const size = Object.keys(questions).length;
-      console.log("NO OF QUES: ", size);
-      setNoOfQuestions(size);
-      questionCtx.createDDQStatus(size);
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   const size = Object.keys(questions).length;
+    //   console.log("NO OF QUES: ", size);
+    //   setNoOfQuestions(size);
+    //   questionCtx.createDDQStatus(size);
+    // } catch (err) {
+    //   console.log(err);
+    // }
     setLoadingData(false);
   };
 
   const nextBtnHandler = () => {
-    // console.log(questionCtx.pbQuestionStatus);
-    // console.log(questionNo);
-    // console.log(rankArr, rateArr);
+    
     if (section === SECTION.PB) {
-      // if (questionCtx.pbQuestionStatus[questionNo] == 0) {
-      //   console.log("ZERO HAI BHAI");
-      //   alert("Please choose one option before moving forward.");
-      //   return;
-      // }
 
       if(pbQuestionIdxStatus[questionNo] == 0) {
         console.log("ZERO HAI BHAI");
@@ -184,12 +187,13 @@ export default function QuestionsPage({ searchParams }) {
       }
       setSubmitBtnDisabled(!pbQuizCompleteStatus);
     } else if (section === SECTION.CT) {
-      if (questionCtx.ctQuestionStatus[questionNo] == 0) {
+      if(ctQuestionIdxStatus[questionNo] == 0) {
         console.log("ZERO HAI BHAI");
         alert("Please choose one option before moving forward.");
         return;
       }
-      setSubmitBtnDisabled(questionCtx.ctStatusComplete);
+
+      setSubmitBtnDisabled(!ctQuizCompleteStatus);
     } else if (section === SECTION.DD) {
       if (questionCtx.ddQuestionStatus[questionNo] == 0) {
         console.log(questionCtx.ddQuestionStatus)
@@ -300,8 +304,6 @@ export default function QuestionsPage({ searchParams }) {
     // console.log(section);
     if (section === SECTION.PB) {
       setLoadingData(true);
-      // getQuestionsData(section);
-      // console.log("REDUX WALA: ", pbQuestions)
       getPB();
       setLoadingData(false);
     } else if (section === SECTION.CT) {
@@ -314,10 +316,6 @@ export default function QuestionsPage({ searchParams }) {
       setLoadingData(false);
     }
 
-    // console.log(rankArr, rateArr);
-
-    // console.log(questions);
-    // console.log(questionNo);
   }, [questions]);
 
   return (

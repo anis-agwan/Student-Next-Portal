@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { instructionsData } from "./InstructionsData";
 import "./QuizInstruction.css";
 import { StartButton } from "@/app/components/Buttons/StartButton/StartButton";
@@ -7,11 +7,10 @@ import Link from "next/link";
 import { SECTION } from "@/app/enums/section_enums";
 import { SECTIONTYPE } from "@/app/enums/section_type";
 import { ArrowButton } from "@/app/components/Buttons/ArrowButton/ArrowButton";
-import { AuthContext } from "@/app/store/auth-context";
-import { QuestionContext } from "@/app/store/questions-context";
 import { useDispatch } from "react-redux";
 import { fetchPBQuestions } from "@/app/redux-store/pbQuiz/pb-actions";
 import { fetchCTQuestions } from "@/app/redux-store/ctQuiz/ct-actions";
+import { fetchDDQuestions } from "@/app/redux-store/ddQuiz/dd-actions";
 
 const getInstData = (sectionName, type) => {
   if (sectionName === SECTION.PB) {
@@ -32,7 +31,7 @@ export default function QuizInstruction({ searchParams }) {
   const section = searchParams.section;
   const type = searchParams.type;
 
-  const questionCtx = useContext(QuestionContext);
+  // const questionCtx = useContext(QuestionContext);
 
   const data = getInstData(section, type);
 
@@ -63,21 +62,23 @@ export default function QuizInstruction({ searchParams }) {
     } else if (sectionName === SECTION.CT) {
       dispatch(fetchCTQuestions())
     } else if (sectionName === SECTION.DD) {
-      console.log(questionCtx.ddQuestions);
-      if (questionCtx.ddQuestions === null) {
-        // console.log("NULL");
-        try {
-          let data = {};
-          await questionCtx.getDDQuestion().then((res) => {
-            data = res;
-          });
-          console.log(data);
+      dispatch(fetchDDQuestions())
 
-          questionCtx.setDDData(data);
-        } catch (err) {
-          console.log(err);
-        }
-      }
+      // console.log(questionCtx.ddQuestions);
+      // if (questionCtx.ddQuestions === null) {
+      //   // console.log("NULL");
+      //   try {
+      //     let data = {};
+      //     await questionCtx.getDDQuestion().then((res) => {
+      //       data = res;
+      //     });
+      //     console.log(data);
+
+      //     questionCtx.setDDData(data);
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // }
     }
   };
 

@@ -9,6 +9,7 @@ import { AuthContext } from "@/app/store/auth-context";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { pbActions } from "@/app/redux-store/pbQuiz/pb-slice";
+import { ctActions } from "@/app/redux-store/ctQuiz/ct-slice";
 
 export const Question = ({
   nextBtnHandler,
@@ -37,8 +38,10 @@ export const Question = ({
   } else if (section === SECTION.CT) {
     // question = questionCtx.ctQuestions[questionNo];
     question = useSelector((state) => state.ct.ctQuestions[questionNo]);
+    console.log(question)
   } else if (section === SECTION.DD) {
-    question = questionCtx.ddQuestions[questionNo];
+    // question = questionCtx.ddQuestions[questionNo];
+    question = useSelector((state) => state.dd.ddQuestions[questionNo]);
   }
 
   function createOptionsArr(q) {
@@ -132,8 +135,17 @@ export const Question = ({
       // questionCtx.setPBAnswer(idx, answer);
     } else if (section === SECTION.CT) {
       // console.log(answer);
-      questionCtx.setCTQStatus(idx);
-      questionCtx.setCTAnswer(idx, answer);
+      dispatch(ctActions.rdxChangeCTIdxStatus({
+        idx:idx
+      }))
+
+      dispatch(ctActions.rdxSetCTAnswers({
+        questionNo: idx,
+        answer: answer
+      }))
+
+      // questionCtx.setCTQStatus(idx);
+      // questionCtx.setCTAnswer(idx, answer);
     }
   };
 

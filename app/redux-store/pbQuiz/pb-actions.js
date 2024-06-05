@@ -1,9 +1,7 @@
-import { useSelector } from "react-redux";
 import { fetchData } from "../apiCall";
 import { pbActions } from "./pb-slice";
 
 import { BASEURL, PB_ENDPOINTS, URLPORT } from "@/app/enums/url_enums"
-
 
 
 export const fetchPBQuestions = () => {

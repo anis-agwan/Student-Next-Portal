@@ -30,6 +30,31 @@ const ctSlice = createSlice({
                     lastName: user.lastName,
                 }
             }
+        },
+
+        rdxChangeCTIdxStatus(state, action) {
+            let prevArr = state.ctQuestionIdxStatus;
+            prevArr[action.payload.idx] = 1;
+            state.ctQuestionIdxStatus = prevArr;
+            console.log(state.ctQuestionIdxStatus);
+            state.ctQuizCompleteStatus = !state.ctQuestionIdxStatus.includes(0);
+        },
+
+        rdxSetCTAnswers(state, action) {
+            console.log(state.ctAnswers)
+            const questionNo = action.payload.questionNo
+            const answer = action.payload.answer
+            let ques = `que${parseInt(questionNo) + 1}`;
+            let prevAns = state.ctAnswers;
+            prevAns[ques] = parseInt(answer);
+            state.ctAnswers = prevAns
+            console.log(state.ctAnswers)
+        },
+
+        rdxSubmitCTAnswers(state) {
+            state.ctAnswers = {}
+            state.ctQuestionIdxStatus = [];
+            state.ctQuizCompleteStatus = false;
         }
     }
 })
