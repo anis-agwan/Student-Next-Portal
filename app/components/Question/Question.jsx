@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./Question.css";
 import { OptionsButton } from "./OptionsButton/OptionsButton";
 import { StartButton } from "../Buttons/StartButton/StartButton";
-import { QuestionContext } from "@/app/store/questions-context";
+// import { QuestionContext } from "@/app/store/questions-context";
 import { SECTION } from "@/app/enums/section_enums";
 import { RateInputField } from "./RatinInputField/RateInputField";
 import { AuthContext } from "@/app/store/auth-context";
@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { pbActions } from "@/app/redux-store/pbQuiz/pb-slice";
 import { ctActions } from "@/app/redux-store/ctQuiz/ct-slice";
+import { rdxSubmitDDAnswers } from "@/app/redux-store/ddQuiz/dd-actions";
 
 export const Question = ({
   nextBtnHandler,
@@ -24,10 +25,12 @@ export const Question = ({
   ratingFormValues,
   handleFormChange,
 }) => {
-  const questionCtx = useContext(QuestionContext);
+  // const questionCtx = useContext(QuestionContext);
   const authCtx = useContext(AuthContext);
   const router = useRouter();
   const dispatch = useDispatch();
+  const ddQuestionIdxStatus = useSelector((state) => state.dd.ddQuestionIdxStatus)
+  const ddAnswers = useSelector((state) => state.dd.ddAnswers)
   
 
   let question = null;
@@ -45,6 +48,7 @@ export const Question = ({
   }
 
   function createOptionsArr(q) {
+    // console.log(q)
     let arr = [];
     for (const [key, value] of Object.entries(q)) {
       if (key === "r1Text" && value !== null) {
@@ -79,9 +83,9 @@ export const Question = ({
         });
       }
     }
-
+// console.log(arr);
     return arr;
-    // console.log(arr);
+    
   }
 
   // const [questionStatus, setQuesStatus] = useState([]);
@@ -102,14 +106,23 @@ export const Question = ({
   const onSubmitAnswers = async () => {
     await authCtx.onUpdateStats(section);
 
-    await questionCtx
-      .submitDDAnswers()
-      .then((res) => {
-        router.push("/Quiz/EndScreen");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(!ddQuestionIdxStatus.includes(0)) {
+      dispatch(rdxSubmitDDAnswers(ddAnswers))
+      router.push("/Quiz/EndScreen");
+    } else {
+      alert("Please complete the assessment with all answers.");
+    }
+
+    
+
+    // await questionCtx
+    //   .submitDDAnswers()
+    //   .then((res) => {
+    //     router.push("/Quiz/EndScreen");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   useEffect(() => {

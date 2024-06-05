@@ -20,3 +20,39 @@ export const fetchDDQuestions = () => {
 
     }
 }
+
+export const rdxSubmitDDAnswers = (answers) => {
+    return async (dispatch) => {
+        const url = `${BASEURL.DDBI}:${URLPORT.DD}/${DD_ENDPOINTS.BASE_ENDPOINT}/${DD_ENDPOINTS.SUBMIT_ANSWERS}`
+            
+
+            try {
+                
+                const res = await fetch(
+                    url,
+                    {
+                        method: "POST",
+                        body: JSON.stringify(answers),
+                        headers: {
+                        "Content-Type": "application/json",
+                        },
+                    }
+                )
+                if(!res.ok) {
+                    throw new Error("Error while submitting the answers")
+                }
+
+                // const data = await res.json();
+
+                // alert("SUBMITTEDx")
+
+                dispatch(
+                    ddActions.rdxSubmitDDAnswers()
+                )
+
+            } catch (err) {
+                console.log(err)
+            }
+        
+    }
+}

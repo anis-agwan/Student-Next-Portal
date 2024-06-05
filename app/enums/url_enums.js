@@ -24,7 +24,8 @@ export const BASEURL = {
 
   export const DD_ENDPOINTS = {
     BASE_ENDPOINT: "situation_q/sq",
-    GET_QUESTIONS: "getSQuestions"
+    GET_QUESTIONS: "getSQuestions",
+    SUBMIT_ANSWERS: "sqData"
   }
   
 Object.freeze(BASEURL);

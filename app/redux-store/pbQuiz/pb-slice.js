@@ -60,7 +60,7 @@ const pbSlice = createSlice({
 
         rdxSubmitAnswers(state) {
             state.pbAnswers = {}
-            state.pbQuestionIdxStatus = Array(qSize).fill(0);
+            state.pbQuestionIdxStatus = [];
             state.pbQuizCompleteStatus = false
         }
     }

@@ -5,9 +5,10 @@ import { Question } from "@/app/components/Question/Question";
 import { QNumberGrid } from "@/app/components/QuestionNumberGrid/QNumberGrid";
 import { DD_INPUTS } from "@/app/enums/dd_input";
 import { SECTION } from "@/app/enums/section_enums";
+import { ddActions } from "@/app/redux-store/ddQuiz/dd-slice";
 import { QuestionContext } from "@/app/store/questions-context";
 import React, { useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function QuestionsPage({ searchParams }) {
   const section = searchParams.section;
@@ -28,6 +29,10 @@ export default function QuestionsPage({ searchParams }) {
   //DD
   const ddQuestions = useSelector((state) => state.dd.ddQuestions)
   const ddSize = useSelector((state) => state.dd.ddQuestionsLength)
+  const ddQuestionIdxStatus = useSelector((state) => state.dd.ddQuestionIdxStatus)
+  const ddQuizCompleteStatus = useSelector((state) => state.dd.ddQuizCompleteStatus)
+
+  const dispatch = useDispatch();
 
   const questionCtx = useContext(QuestionContext);
   const [questions, setQuestions] = useState();
@@ -76,23 +81,41 @@ export default function QuestionsPage({ searchParams }) {
       prevRankArr[idx] = event.target.value;
       setRankArr(prevRankArr);
       console.log(prevRankArr)
+      dispatch(
+        ddActions.rdxSetDDAnswers({
+          opID: idx,
+          answer: event.target.value,
+          whichInput: DD_INPUTS.RANKSR
+        })
+      )
       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RANKSR);
     } else if (whichOP === DD_INPUTS.RATESR) {
       // questionCtx.setDDQStatus(idx);
       let prevRateArr = rateArr;
       prevRateArr[idx] = event.target.value;
       setRateArr(prevRateArr);
+      dispatch(
+        ddActions.rdxSetDDAnswers({
+          opID: idx,
+          answer: event.target.value,
+          whichInput: DD_INPUTS.RATESR
+        })
+      )
       questionCtx.setDDAnswer(idx, event.target.value, DD_INPUTS.RATESR);
     }
 
     if(rankArr.length >= optCount && rateArr.length >= optCount && !(rankArr.includes(0) || rateArr.includes(0) || rankArr.includes('') || rateArr.includes(''))) {
-      questionCtx.setDDQStatus(questionNo, "+")
+      console.log(rankArr.length)
+    console.log(rateArr.length)
+    console.log(rankArr, rateArr)
+      dispatch(
+        ddActions.rdxChangeDDIdxStatus({
+          idx:questionNo,
+          whatToDo: "+"
+        })
+      )
+      // questionCtx.setDDQStatus(questionNo, "+")
     }
-
-    // console.log(rankArr.length)
-    // console.log(rateArr.length)
-    // console.log(rankArr, rateArr)
-    // console.log(questionCtx.ddQuestionStatus)
 
   };
 
@@ -195,14 +218,19 @@ export default function QuestionsPage({ searchParams }) {
 
       setSubmitBtnDisabled(!ctQuizCompleteStatus);
     } else if (section === SECTION.DD) {
-      if (questionCtx.ddQuestionStatus[questionNo] == 0) {
-        console.log(questionCtx.ddQuestionStatus)
-        console.log(rankArr)
-        console.log(rateArr)
+      if(ddQuestionIdxStatus[questionNo] == 0) {
         console.log("DD ZERO HAI BHAI");
         alert("Please answer before moving forward.");
         return;
       }
+      // if (questionCtx.ddQuestionStatus[questionNo] == 0) {
+      //   console.log(questionCtx.ddQuestionStatus)
+      //   console.log(rankArr)
+      //   console.log(rateArr)
+      //   console.log("DD ZERO HAI BHAI");
+      //   alert("Please answer before moving forward.");
+      //   return;
+      // }
     }
 
     if (
@@ -211,13 +239,25 @@ export default function QuestionsPage({ searchParams }) {
       !(rateArr.includes(0) || rateArr.includes(""))
     ) {
       if (!(ratingCheck(rateArr) || duplicatesCheck(rankArr))) {
+        dispatch(
+          ddActions.rdxChangeDDCounter({
+            val: optCount,
+            whichBtn: "next"
+          })
+        )
         questionCtx.setDDCounter(optCount, "next", noOfQuestions);
         setRankArr([]);
         setRateArr([]);
         setFormValues([{ rank: "Rank1", value: "" }]);
         setRatingFormValues([]);
         console.log(questionNo);
-        questionCtx.setDDQStatus(questionNo, "+");
+        dispatch(
+          ddActions.rdxChangeDDIdxStatus({
+            idx:questionNo,
+            whatToDo: "+"
+          })
+        )
+        // questionCtx.setDDQStatus(questionNo, "+");
       } else {
         alert(
           "Invalid: Rank (Ranking should be unique with correct options and should be in descending order)"
@@ -241,12 +281,21 @@ export default function QuestionsPage({ searchParams }) {
     // console.log(questionCtx.ddStatusComplete);
     if (section === SECTION.DD && questionNo + 1 === noOfQuestions) {
       // console.log(questionCtx.ddAnswers);
-      questionCtx.setDDQStatus(questionNo);
-      console.log(questionCtx.ddQuestionStatus);
-      console.log(questionCtx.ddStatusComplete);
-      if (!questionCtx.ddQuestionStatus.includes(0)) {
-        setSubmitBtnDisabled(false);
+      dispatch(
+        ddActions.rdxChangeDDIdxStatus({
+          idx:questionNo,
+          // whatToDo: "+"
+        })
+      )
+      // questionCtx.setDDQStatus(questionNo);
+      // console.log(questionCtx.ddQuestionStatus);
+      // console.log(questionCtx.ddStatusComplete);
+      if(!ddQuestionIdxStatus.includes(0)) {
+        setSubmitBtnDisabled(!ddQuizCompleteStatus);
       }
+      // if (!questionCtx.ddQuestionStatus.includes(0)) {
+      //   setSubmitBtnDisabled(false);
+      // }
     }
     if (questionNo + 1 < noOfQuestions) {
       setQuestionNo(questionNo + 1);
@@ -267,10 +316,22 @@ export default function QuestionsPage({ searchParams }) {
 
   const prevBtnHandler = () => {
     console.log(questionNo);
-    questionCtx.setDDQStatus(questionNo, "-")
+    dispatch(
+      ddActions.rdxChangeDDIdxStatus({
+        idx:questionNo,
+        whatToDo: "-"
+      })
+    )
+    // questionCtx.setDDQStatus(questionNo, "-")
     if (questionNo > 0) {
       setQuestionNo(questionNo - 1);
-      questionCtx.setDDQStatus(questionNo-1, "-")
+      dispatch(
+        ddActions.rdxChangeDDIdxStatus({
+          idx:questionNo-1,
+          whatToDo: "-"
+        })
+      )
+      // questionCtx.setDDQStatus(questionNo-1, "-")
       // if (questionNo - 1 <= 0) {
       //   console.log("NOO");
       //   setBtnDisabled(true);
@@ -281,6 +342,12 @@ export default function QuestionsPage({ searchParams }) {
       setNextBtnDisabled(false);
 
       if (section === SECTION.DD) {
+        dispatch(
+          ddActions.rdxChangeDDCounter({
+            val: optCount,
+            whichBtn: "prev"
+          })
+        )
         questionCtx.setDDCounter(optCount, "prev");
         setFormValues([{ rank: "Rank1", value: "" }]);
         setRatingFormValues([]);
