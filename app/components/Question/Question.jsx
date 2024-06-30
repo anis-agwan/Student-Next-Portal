@@ -33,19 +33,28 @@ export const Question = ({
   const ddAnswers = useSelector((state) => state.dd.ddAnswers)
   
 
-  let question = null;
+  let sectionWhich = null;
+  let sectionQuestions = null;
   if (section === SECTION.PB) {
     // question = questionCtx.pbQuestions[questionNo];
-    question = useSelector((state) => state.pb.pbQuestions[questionNo]);
+    sectionWhich = "pb"
+    sectionQuestions = "pbQuestions"
+    // question = useSelector((state) => state.pb.pbQuestions[questionNo]);
     
   } else if (section === SECTION.CT) {
     // question = questionCtx.ctQuestions[questionNo];
-    question = useSelector((state) => state.ct.ctQuestions[questionNo]);
-    console.log(question)
+    sectionWhich = "ct"
+    sectionQuestions = "ctQuestions"
+    // question = useSelector((state) => state.ct.ctQuestions[questionNo]);
+    
   } else if (section === SECTION.DD) {
+    sectionWhich = "dd"
+    sectionQuestions = "ddQuestions"
     // question = questionCtx.ddQuestions[questionNo];
-    question = useSelector((state) => state.dd.ddQuestions[questionNo]);
+    // question = useSelector((state) => state.dd.ddQuestions[questionNo]);
   }
+
+  const question = useSelector((state) => state[sectionWhich][sectionQuestions][questionNo]);
 
   function createOptionsArr(q) {
     // console.log(q)

@@ -21,14 +21,24 @@ export const QNumberGrid = ({
   const authCtx = useContext(AuthContext);
   let questionStatus = [];
 
+  let sectionWhich = null;
+  let sectionQuestions = null;
   if (section === SECTION.PB) {
-    // console.log(isSubmitBtnDisabled)
-    questionStatus = useSelector((state) => state.pb.pbQuestionIdxStatus);
+    // question = questionCtx.pbQuestions[questionNo];
+    sectionWhich = "pb"
+    sectionQuestions = "pbQuestionIdxStatus"
+    // question = useSelector((state) => state.pb.pbQuestions[questionNo]);
+    
   } else if (section === SECTION.CT) {
-    // console.log(questionCtx.ctQuestionStatus);
-    // questionStatus = questionCtx.ctQuestionStatus;
-    questionStatus = useSelector((state) => state.ct.ctQuestionIdxStatus);
+    // question = questionCtx.ctQuestions[questionNo];
+    sectionWhich = "ct"
+    sectionQuestions = "ctQuestionIdxStatus"
+    // question = useSelector((state) => state.ct.ctQuestions[questionNo]);
+    
   }
+
+
+  questionStatus = useSelector((state) => state[sectionWhich][sectionQuestions]);
 
   const dispatch = useDispatch();
   const pbAnswers = useSelector((state) => state.pb.pbAnswers)
