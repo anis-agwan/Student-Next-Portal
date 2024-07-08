@@ -18,8 +18,10 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true} className={inter.className}>
         <AuthContextProvider>
           <div className="flex flex-col">
-            <Navbar />
-            <QuestionContextProvider><Providers>{children}</Providers></QuestionContextProvider>
+          <Providers>
+              <Navbar />
+              <QuestionContextProvider>{children}</QuestionContextProvider>
+            </Providers>
           </div>
         </AuthContextProvider>
       </body>

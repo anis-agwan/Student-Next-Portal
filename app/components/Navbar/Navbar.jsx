@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 
 import { useRouter } from "next/navigation";
@@ -14,6 +14,8 @@ import Avatar from "./UserLogo.png";
 //Styles
 import "./Menu.css";
 import { AuthContext } from "@/app/store/auth-context";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "@/app/redux-store/authRdxStore/auth-slice";
 
 // let useClickOutside = (handler) => {
 //   let domNode = useRef();
@@ -49,54 +51,81 @@ export const Navbar = () => {
   const [user, setUser] = useState({});
   const authCtx = useContext(AuthContext);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const rdxUser = useSelector((state) => state.auth.user)
+  const rdxIsLoggedIn = useSelector((state) => state.auth.isLoggedIn)
 
   // let domNode = useClickOutside(() => {
   //   setMenuActive(false);
   // });
 
   useEffect(() => {
-    console.log(authCtx.user);
-    if (authCtx.isLoggedIn && authCtx.user) {
-      setUser(authCtx.user);
-      setIsLoggedIn(true);
-    }
+    console.log(rdxUser);
+
+
+    // if (authCtx.isLoggedIn && authCtx.user) {
+    //   setUser(authCtx.user);
+    //   setIsLoggedIn(true);
+    // }
   });
 
   const dashboardRoute = () => {
     // let path = `/SelectionScreen`;
     setMenuActive(false);
-    if (authCtx.isLoggedIn) {
-      // router.push("SelectionScreen");
+    if(rdxIsLoggedIn) {
       router.replace("/SelectionScreen");
     } else {
       router.push("/");
     }
+    // if (authCtx.isLoggedIn) {
+    //   // router.push("SelectionScreen");
+    //   router.replace("/SelectionScreen");
+    // } else {
+    //   router.push("/");
+    // }
   };
   const reportRoute = () => {
     setMenuActive(false);
-    if (authCtx.isLoggedIn) {
-      setMenuActive(false);
-      // router.push("Reports");
+    if(rdxIsLoggedIn) {
       router.replace("/Reports");
     } else {
       // router.push("/");
       redirect("/");
     }
+
+    // if (authCtx.isLoggedIn) {
+    //   setMenuActive(false);
+    //   // router.push("Reports");
+    //   router.replace("/Reports");
+    // } else {
+    //   // router.push("/");
+    //   redirect("/");
+    // }
   };
 
   const logginOut = () => {
+    dispatch(authActions.rdxLogoutUser())
     authCtx.onLogout();
-    setIsLoggedIn(false);
-    setMenuActive(false);
+    // setIsLoggedIn(false);
+    // setMenuActive(false);
     router.push("/");
   };
 
   const imgClick = () => {
-    if (authCtx.isLoggedIn) {
+    console.log("IMAGE CLICK")
+    if(rdxIsLoggedIn) {
       router.push("/SelectionScreen");
+      // return;
     } else {
       router.push("/");
+      // return;
     }
+
+    // if (authCtx.isLoggedIn) {
+    //   router.push("/SelectionScreen");
+    // } else {
+    //   router.push("/");
+    // }
   };
 
   return (
@@ -110,7 +139,7 @@ export const Navbar = () => {
             onClick={imgClick}
           />
         </div>
-        {isLoggedIn && (
+        {rdxIsLoggedIn && (
           <div
             className="flex"
             // ref={(el) => {
@@ -119,13 +148,13 @@ export const Navbar = () => {
           >
             <div className={`dropDown ${isMenuActive ? "active" : "inactive"}`}>
               <div className="menuStyle">
-                {user && (
+                {rdxUser && (
                   <div className="Dropdownlabel">
                     {/* {user.firstName + " " + user.lastName} */}
                   </div>
                 )}
                 <div className="Dropdownlabel">
-                  {user.firstName + " " + user.lastName}
+                  {rdxUser.firstName + " " + rdxUser.lastName}
                 </div>
                 {/* <button onClick={profileRoute} className="ProfileBtn">
                 Profile
@@ -138,7 +167,7 @@ export const Navbar = () => {
                     setMenuActive(false);
                   }}
                 >
-                  Menu
+                  Quiz Menu
                 </button>{" "}
                 {/* </Link> */}
                 <button

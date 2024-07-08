@@ -5,14 +5,24 @@ import { AuthImage } from "./components/Authtentication/AuthImage";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./store/auth-context";
 import { redirect } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "./redux-store/authRdxStore/auth-slice";
 
 export default function Home() {
   const authCtx = useContext(AuthContext);
 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   useEffect(() => {
+    console.log(isLoggedIn)
+    if(isLoggedIn) {
+      redirect("/SelectionScreen");
+    }
     if (authCtx.isLoggedIn) {
       redirect("/SelectionScreen");
     }
+
+
   });
 
   return (
