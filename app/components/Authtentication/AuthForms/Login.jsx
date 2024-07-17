@@ -20,6 +20,7 @@ import { passwordReducer, userNameReducer } from "./AuthReducers";
 import { useDispatch } from "react-redux";
 import { authActions } from "@/app/redux-store/authRdxStore/auth-slice";
 import { onRdxLogin } from "@/app/redux-store/authRdxStore/auth-actions";
+import { onAuthRdxOptmLogin } from "@/app/redux-store/optimizedApis/auth-optm-action";
 
 export const Login = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
@@ -89,7 +90,18 @@ export const Login = ({ handleState }) => {
     if (formIsValid) {
       //Uncomment this
 
-      dispatch(onRdxLogin(userNameState.value, passwordState.value)).then((res) => {
+      // dispatch(onRdxLogin(userNameState.value, passwordState.value)).then((res) => {
+      //   console.log(res);
+      //   if(res) {
+      //       authCtx.onSetLogin();
+      //       console.log(authCtx.isLoggedIn);
+      //       router.push("/SelectionScreen");
+      //   } else {
+      //     console.log("Authentication failed, try again.")
+      //   }
+      // });
+
+      dispatch(onAuthRdxOptmLogin(userNameState.value, passwordState.value)).then((res) => {
         console.log(res);
         if(res) {
             authCtx.onSetLogin();
@@ -98,7 +110,8 @@ export const Login = ({ handleState }) => {
         } else {
           console.log("Authentication failed, try again.")
         }
-      });
+      })
+
       await authCtx
         .onLogin(userNameState.value, passwordState.value)
         .then((res) => {
