@@ -3,7 +3,9 @@ import { act } from 'react';
 
 const initialState = {
     isLoggedIn: false,
-    user: {}
+    user: {},
+    newUserState: {},
+    tempToken: ""
 };
 
 const authSlice = createSlice({
@@ -21,7 +23,12 @@ const authSlice = createSlice({
         console.log("RDX ON LOGOUT");
         state.isLoggedIn = false
         state.user = {}
+    },
+
+    rdxSavingSignUpInfo(state, action) {
+      state.newUserState = {...action.payload.newUser}
     }
+
   }
 });
 

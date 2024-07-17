@@ -70,3 +70,41 @@ export const onAuthRdxOptmLogin = (email, password) => {
         return isAuthenticated;
     }
 }
+
+export const onAuthRdxGenToken = (tokenRequest) => {
+    return async () => {
+        const url = "http://localhost:8081/auth/token/generatetoken"
+        let genToken = false;
+        try {
+            const res = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(tokenRequest),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+            })
+
+            if(!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Could not generate token');
+            }
+
+            if(res.ok) {
+                const data = await res.json();
+
+                console.log("======================");
+
+                console.log(data);
+
+                console.log("======================");
+                genToken = true
+                return genToken;
+            }
+            
+        } catch(err) {
+            console.log(err);
+            alert(err);
+        }
+        return genToken;
+    }
+}
