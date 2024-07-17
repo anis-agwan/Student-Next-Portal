@@ -49,6 +49,7 @@ export const RateInputField = ({
         <div className="flex flex-col gap-2">
           <div>
             <h4>Ranking: 1 = highest and {noOfOptions} = lowest</h4>
+            <h4>Ranking: 1 = poor and {noOfOptions} = excellent</h4>
           </div>
           {formValues.map((elem, idx) => {
             return (
@@ -71,6 +72,7 @@ export const RateInputField = ({
           <div className="flex flex-col gap-2">
             <div>
               <h4>Rating: 1 = satisfied and {noOfOptions} = not satisfied </h4>
+              <h4>Rating: 1 = not satisfied and {noOfOptions} = extremely satisfied </h4>
             </div>
             {ratingFormValues.length > 0 &&
               ratingFormValues.map((elem, idx) => {

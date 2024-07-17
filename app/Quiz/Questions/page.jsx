@@ -54,6 +54,9 @@ export default function QuestionsPage({ searchParams }) {
   const [rankArr, setRankArr] = useState([""]);
   const [rateArr, setRateArr] = useState([""]);
 
+  const [reverseRankAnsCounter, setReverseRank] = useState(5);
+  const [reverseRateAnsCounter, setReverseRate] = useState(5);
+
   const handleFormChange = (event, idx, whichOP) => {
     // console.log(rankArr, rateArr);
     // console.log(questionCtx)
@@ -77,6 +80,13 @@ export default function QuestionsPage({ searchParams }) {
 
     if (whichOP === DD_INPUTS.RANKSR) {
       // questionCtx.setDDQStatus(idx);
+      console.log("=================")
+      console.log(reverseRankAnsCounter, event.target.value);
+      console.log(reverseRankAnsCounter - event.target.value+1);
+      console.log("=================")
+
+      let ans = (reverseRankAnsCounter - event.target.value) + 1
+      
       let prevRankArr = rankArr;
       prevRankArr[idx] = event.target.value;
       setRankArr(prevRankArr);
@@ -359,7 +369,7 @@ export default function QuestionsPage({ searchParams }) {
   };
 
   const getOptionsCount = (val) => {
-    console.log(val);
+    // console.log(val);
     setOPCount(val);
 
     // const arr = Array(val).fill(0);
