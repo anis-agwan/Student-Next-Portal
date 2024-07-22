@@ -5,11 +5,11 @@ import { AuthButton } from "../../Buttons/AuthButton/AuthButton";
 import { passwordReducer } from "./AuthReducers";
 import { AuthContext } from "@/app/store/auth-context";
 import { AUTHSTATE } from "@/app/enums/auth_state";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthRdxNewPassword } from "@/app/redux-store/optimizedApis/auth-optm-action";
 
 export const NewPassForm = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
-
-  console.log(authCtx.signUpStudentData);
 
   const [newpassFormIsValid, setNewPassFormIsValid] = useState(false);
 
@@ -20,6 +20,9 @@ export const NewPassForm = ({ handleState }) => {
 
   const { value: enteredPassword, isValid: isPassValid } = passwordState;
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
+
+  const newTempToken = useSelector((state) => state.auth.tempToken);
+  const dispatch = useDispatch();
 
   const passwordChangehandler = (event) => {
     dispatchPassword({
@@ -56,18 +59,36 @@ export const NewPassForm = ({ handleState }) => {
 
   const onNewPassSubmit = async (event) => {
     event.preventDefault();
-    await authCtx
-      .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
-      .then((r) => {
-        if (r === true) {
-          handleState(AUTHSTATE.LOGIN);
-        } else {
-          throw new Error("Password did not change");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(newTempToken.tokenState);
+    const user = {
+      emailId: newTempToken.emailId,
+      token: newTempToken.tokenState,
+      newPassword: passwordState.value
+    }
+
+    console.log(user);
+
+    await dispatch(
+      onAuthRdxNewPassword(user)
+    ).then((res) => {
+      console.log("NEW PASS")
+      if(res) {
+        handleState(AUTHSTATE.LOGIN);
+      }
+    })
+    
+    // await authCtx
+    //   .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
+    //   .then((r) => {
+    //     if (r === true) {
+    //       handleState(AUTHSTATE.LOGIN);
+    //     } else {
+    //       throw new Error("Password did not change");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (

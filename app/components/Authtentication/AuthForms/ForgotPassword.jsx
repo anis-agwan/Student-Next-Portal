@@ -6,10 +6,16 @@ import { AUTHSTATE } from "@/app/enums/auth_state";
 import { AuthContext } from "@/app/store/auth-context";
 import { tokenReducer, userNameReducer } from "./AuthReducers";
 import { TOKEN_ENUMS } from "@/app/enums/token_enums";
+import { useDispatch } from "react-redux";
+import { onAuthRdxConfirmToken, onAuthRdxGenToken, onAuthRdxNewPassword } from "@/app/redux-store/optimizedApis/auth-optm-action";
+import { authActions } from "@/app/redux-store/authRdxStore/auth-slice";
 
 export const ForgotPassword = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
   const [formIsValid, setFormIsValid] = useState(false);
+
+  const dispatch = useDispatch();
+
 
   const [userNameState, dispatchUserName] = useReducer(userNameReducer, {
     value: "",
@@ -67,29 +73,70 @@ export const ForgotPassword = ({ handleState }) => {
     };
   }, [userNameIsValid, tokenIsValid, formIsValid]);
 
-  const onEmailSubmit = (event) => {
+  const onEmailSubmit = async (event) => {
     event.preventDefault();
     console.log(userNameIsValid);
     if (userNameIsValid) {
-      authCtx.onGenerateToken(userNameState.value, TOKEN_ENUMS.FORGOT);
+      await dispatch(
+        onAuthRdxGenToken(
+          {
+            email: userNameState.value,
+            requestType: "Login",
+          }
+        )
+      ).then(() => {
+        alert("A temporary Token has been sent to your BU email address.");
+      }).catch((err) => {
+        console.log(err);
+      })
+      // authCtx.onGenerateToken(userNameState.value, TOKEN_ENUMS.FORGOT);
     }
   };
 
-  const onTokenSubmit = (event) => {
+  const onTokenSubmit = async (event) => {
     event.preventDefault();
+    const confirmTokenRequest = {
+      emailId: userNameState.value,
+      token: tokenState.value,
+      requestType: "Login"
+    }
     if (formIsValid) {
-      authCtx
-        .onTokenSubmit(
-          userNameState.value,
-          tokenState.value,
-          TOKEN_ENUMS.FORGOT
+      await dispatch(
+        onAuthRdxConfirmToken(confirmTokenRequest)
+     ).then(async (res) => {
+       console.log("SUCCESSFUL");
+       console.log(res);
+       console.log(res === true);
+       console.log("What is going on");
+       if(res) {
+        await dispatch(
+          authActions.rdxNewPassword({
+            tempToken: {
+              emailId: userNameState.value,
+              tokenState: tokenState.value,
+            }
+          })
         )
-        .then((res) => {
-          if (res) {
-            authCtx.passStudentData({ emailId: userNameState.value });
-            handleState(AUTHSTATE.NEWPASS);
-          }
-        });
+
+        handleState(AUTHSTATE.NEWPASS);
+       } else {
+         throw new Error("Some issue verifying the token");
+       }
+     }).catch((err) => {
+       console.log(err);
+     })
+      // authCtx
+      //   .onTokenSubmit(
+      //     userNameState.value,
+      //     tokenState.value,
+      //     TOKEN_ENUMS.FORGOT
+      //   )
+      //   .then((res) => {
+      //     if (res) {
+      //       authCtx.passStudentData({ emailId: userNameState.value });
+      //       handleState(AUTHSTATE.NEWPASS);
+      //     }
+      //   });
     }
   };
 

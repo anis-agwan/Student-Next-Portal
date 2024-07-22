@@ -5,7 +5,7 @@ const initialState = {
     isLoggedIn: false,
     user: {},
     newUserState: {},
-    tempToken: ""
+    tempToken: {},
 };
 
 const authSlice = createSlice({
@@ -31,6 +31,11 @@ const authSlice = createSlice({
 
     rdxSignUpUser(state, action) {
 
+    },
+
+    rdxNewPassword(state, action) {
+      const newTemp = {...action.payload.tempToken}
+      state.tempToken = newTemp;
     }
 
   }
