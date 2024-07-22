@@ -7,6 +7,8 @@ import { AuthContext } from "@/app/store/auth-context";
 import { tokenReducer } from "./AuthReducers";
 import { USER_ROLE } from "@/app/enums/role_enums";
 import { TOKEN_ENUMS } from "@/app/enums/token_enums";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthRdxConfirmToken, onAuthRdxOptmSignUp } from "@/app/redux-store/optimizedApis/auth-optm-action";
 
 export const SignUpToken = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
@@ -18,6 +20,9 @@ export const SignUpToken = ({ handleState }) => {
     isValid: null,
   });
   const { isValid: tokenIsValid } = tokenState;
+
+  const newUserState = useSelector((state) => state.auth.newUserState);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (tokenIsValid) {
@@ -44,34 +49,79 @@ export const SignUpToken = ({ handleState }) => {
     dispatchToken({ type: "INPUT_BLUR" });
   };
 
-  const onTokenSubmit = (event) => {
+  const onTokenSubmit = async (event) => {
     event.preventDefault();
     if (tokenFormIsValid) {
-      console.log(studentData);
-      authCtx
-        .onTokenSubmit(
-          studentData.emailId,
-          tokenState.value,
-          TOKEN_ENUMS.REGISTER
-        )
-        .then((res) => {
-          console.log(res);
-          if (res) {
-            authCtx
-              .onSignup(
-                studentData.emailId,
-                studentData.bingNumber,
-                studentData.firstName,
-                studentData.lastName,
-                studentData.password,
-                USER_ROLE.STUDENT
-              )
-              .then((res) => {
-                alert("Successfully registered");
-                handleState(AUTHSTATE.LOGIN);
-              });
+      // console.log(studentData);
+      
+      const confirmTokenRequest = {
+        emailId: newUserState.emailId,
+        token: tokenState.value
+      }
+
+      console.log(confirmTokenRequest);
+
+
+      await dispatch(
+         onAuthRdxConfirmToken(confirmTokenRequest)
+      ).then((res) => {
+        console.log("SUCCESSFUL");
+        console.log(res);
+        console.log(res === true);
+        console.log("What is going on");
+        if(res) {
+          console.log("CAN SiGNUP");
+          const signUpUser = {
+            emailId: newUserState.emailId,
+            bNumber: newUserState.bingNumber,
+            firstName: newUserState.firstName,
+            lastName: newUserState.lastName,
+            password: newUserState.password,
+            role: "student"
           }
-        });
+          dispatch(
+            onAuthRdxOptmSignUp(signUpUser)
+          ).then((r) => {
+            if(r && res.data.errorCode === 200) {
+                alert(res.data.message);
+                handleState(AUTHSTATE.LOGIN);
+                
+            } else {
+              throw new Error("Some issue while creating the account");
+            }
+          }).catch((err) => {
+            console.log(err);
+          })
+        } else {
+          throw new Error("Some issue verifying the token");
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+      // authCtx
+      //   .onTokenSubmit(
+      //     studentData.emailId,
+      //     tokenState.value,
+      //     TOKEN_ENUMS.REGISTER
+      //   )
+      //   .then((res) => {
+      //     console.log(res);
+      //     if (res) {
+      //       authCtx
+      //         .onSignup(
+      //           studentData.emailId,
+      //           studentData.bingNumber,
+      //           studentData.firstName,
+      //           studentData.lastName,
+      //           studentData.password,
+      //           USER_ROLE.STUDENT
+      //         )
+      //         .then((res) => {
+      //           alert("Successfully registered");
+      //           handleState(AUTHSTATE.LOGIN);
+      //         });
+      //     }
+      //   });
     }
   };
 

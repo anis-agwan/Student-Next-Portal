@@ -27,6 +27,10 @@ const authSlice = createSlice({
 
     rdxSavingSignUpInfo(state, action) {
       state.newUserState = {...action.payload.newUser}
+    },
+
+    rdxSignUpUser(state, action) {
+
     }
 
   }
