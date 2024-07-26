@@ -192,29 +192,30 @@ export const Signup = ({ handleState, passStudentInfo }) => {
     if (formIsValid) {
       authCtx.passStudentData(user);
 
-      dispatch(authActions.rdxSavingSignUpInfo({
-        newUser: user
-      }))
+      // dispatch(authActions.rdxSavingSignUpInfo({
+      //   newUser: user
+      // }))
 
-      await dispatch(
-          onAuthRdxGenToken(
-            {
-              email: user.emailId,
-              requestType: "Register"
-            }
-          )
-      ).then(() => {
+      // await dispatch(
+      //     onAuthRdxGenToken(
+      //       {
+      //         email: user.emailId,
+      //         requestType: "Register"
+      //       }
+      //     )
+      // ).then(() => {
+      //     alert("A temporary Token has been sent to your BU email address.");
+      //     handleState(AUTHSTATE.TOKENSIGNUP);
+      // }).catch((err) => {
+      //   console.log(err);
+      // })
+
+      await authCtx
+        .onGenerateToken(userNameState.value, TOKEN_ENUMS.REGISTER)
+        .then(() => {
           alert("A temporary Token has been sent to your BU email address.");
           handleState(AUTHSTATE.TOKENSIGNUP);
-      }).catch((err) => {
-        console.log(err);
-      })
-
-      // await authCtx
-      //   .onGenerateToken(userNameState.value, TOKEN_ENUMS.REGISTER)
-      //   .then(() => {
-      //     alert("A temporary Token has been sent to your BU email address.");
-      //   });
+        });
 
       
     }

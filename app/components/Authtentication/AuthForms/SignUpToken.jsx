@@ -62,66 +62,71 @@ export const SignUpToken = ({ handleState }) => {
       console.log(confirmTokenRequest);
 
 
-      await dispatch(
-         onAuthRdxConfirmToken(confirmTokenRequest)
-      ).then((res) => {
-        console.log("SUCCESSFUL");
-        console.log(res);
-        console.log(res === true);
-        console.log("What is going on");
-        if(res) {
-          console.log("CAN SiGNUP");
-          const signUpUser = {
-            emailId: newUserState.emailId,
-            bNumber: newUserState.bingNumber,
-            firstName: newUserState.firstName,
-            lastName: newUserState.lastName,
-            password: newUserState.password,
-            role: "student"
-          }
-          dispatch(
-            onAuthRdxOptmSignUp(signUpUser)
-          ).then((r) => {
-            if(r && res.data.errorCode === 200) {
-                alert(res.data.message);
-                handleState(AUTHSTATE.LOGIN);
-                
-            } else {
-              throw new Error("Some issue while creating the account");
-            }
-          }).catch((err) => {
-            console.log(err);
-          })
-        } else {
-          throw new Error("Some issue verifying the token");
-        }
-      }).catch((err) => {
-        console.log(err);
-      })
-      // authCtx
-      //   .onTokenSubmit(
-      //     studentData.emailId,
-      //     tokenState.value,
-      //     TOKEN_ENUMS.REGISTER
-      //   )
-      //   .then((res) => {
-      //     console.log(res);
-      //     if (res) {
-      //       authCtx
-      //         .onSignup(
-      //           studentData.emailId,
-      //           studentData.bingNumber,
-      //           studentData.firstName,
-      //           studentData.lastName,
-      //           studentData.password,
-      //           USER_ROLE.STUDENT
-      //         )
-      //         .then((res) => {
-      //           alert("Successfully registered");
-      //           handleState(AUTHSTATE.LOGIN);
-      //         });
+      // await dispatch(
+      //    onAuthRdxConfirmToken(confirmTokenRequest)
+      // ).then((res) => {
+      //   console.log("SUCCESSFUL");
+      //   console.log(res);
+      //   console.log(res === true);
+      //   console.log("What is going on");
+      //   if(res) {
+      //     console.log("CAN SiGNUP");
+      //     const signUpUser = {
+      //       emailId: newUserState.emailId,
+      //       bNumber: newUserState.bingNumber,
+      //       firstName: newUserState.firstName,
+      //       lastName: newUserState.lastName,
+      //       password: newUserState.password,
+      //       role: "student"
       //     }
-      //   });
+      //     dispatch(
+      //       onAuthRdxOptmSignUp(signUpUser)
+      //     ).then((r) => {
+      //       if(r && res.data.errorCode === 200) {
+      //           alert(res.data.message);
+      //           handleState(AUTHSTATE.LOGIN);
+                
+      //       } else {
+      //         throw new Error("Some issue while creating the account");
+      //       }
+      //     }).catch((err) => {
+      //       console.log(err);
+      //     })
+      //   } else {
+      //     throw new Error("Some issue verifying the token");
+      //   }
+      // }).catch((err) => {
+      //   console.log(err);
+      // })
+      authCtx
+        .onTokenSubmit(
+          studentData.emailId,
+          tokenState.value,
+          TOKEN_ENUMS.REGISTER
+        )
+        .then((res) => {
+          console.log(res);
+          if (res) {
+            authCtx
+              .onSignup(
+                studentData.emailId,
+                studentData.bingNumber,
+                studentData.firstName,
+                studentData.lastName,
+                studentData.password,
+                USER_ROLE.STUDENT
+              )
+              .then((res) => {
+                if(res) {
+                  alert("Successfully registered");
+                  handleState(AUTHSTATE.LOGIN);
+                } else {
+                  alert("Error : Email / B-Number already exists")
+                  handleState(AUTHSTATE.SIGNUP);
+                }
+              });
+          }
+        });
     }
   };
 

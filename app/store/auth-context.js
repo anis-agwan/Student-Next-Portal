@@ -149,12 +149,16 @@ export const AuthContextProvider = ({ children }) => {
 
       res.text().then((body) => {
         console.log(body);
-        if (body === "No Such email found" || body === "User already exists") {
+        if (body === "No Such email found" || body === "User already exists" || body === "Error : Email / B-Number already exists") {
           throw new Error(body);
         } else {
           // console.log(res.data);
           islog = true;
         }
+      }).catch((err) => {
+        console.log(err);
+        // alert(err);
+        islog = false;
       });
     } catch (err) {
       console.log(err);

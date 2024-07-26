@@ -101,16 +101,16 @@ export const Login = ({ handleState }) => {
       //   }
       // });
 
-      dispatch(onAuthRdxOptmLogin(userNameState.value, passwordState.value)).then((res) => {
-        console.log(res);
-        if(res) {
-            authCtx.onSetLogin();
-            console.log(authCtx.isLoggedIn);
-            router.push("/SelectionScreen");
-        } else {
-          console.log("Authentication failed, try again.")
-        }
-      })
+      // dispatch(onAuthRdxOptmLogin(userNameState.value, passwordState.value)).then((res) => {
+      //   console.log(res);
+      //   if(res) {
+      //       authCtx.onSetLogin();
+      //       console.log(authCtx.isLoggedIn);
+      //       router.push("/SelectionScreen");
+      //   } else {
+      //     console.log("Authentication failed, try again.")
+      //   }
+      // })
 
       await authCtx
         .onLogin(userNameState.value, passwordState.value)

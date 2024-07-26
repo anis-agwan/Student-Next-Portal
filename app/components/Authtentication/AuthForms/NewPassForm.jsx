@@ -68,27 +68,27 @@ export const NewPassForm = ({ handleState }) => {
 
     console.log(user);
 
-    await dispatch(
-      onAuthRdxNewPassword(user)
-    ).then((res) => {
-      console.log("NEW PASS")
-      if(res) {
-        handleState(AUTHSTATE.LOGIN);
-      }
-    })
+    // await dispatch(
+    //   onAuthRdxNewPassword(user)
+    // ).then((res) => {
+    //   console.log("NEW PASS")
+    //   if(res) {
+    //     handleState(AUTHSTATE.LOGIN);
+    //   }
+    // })
     
-    // await authCtx
-    //   .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
-    //   .then((r) => {
-    //     if (r === true) {
-    //       handleState(AUTHSTATE.LOGIN);
-    //     } else {
-    //       throw new Error("Password did not change");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    await authCtx
+      .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
+      .then((r) => {
+        if (r === true) {
+          handleState(AUTHSTATE.LOGIN);
+        } else {
+          throw new Error("Password did not change");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
