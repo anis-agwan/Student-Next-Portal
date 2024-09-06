@@ -90,16 +90,16 @@ export const Login = ({ handleState }) => {
     if (formIsValid) {
       //Uncomment this
 
-      // dispatch(onRdxLogin(userNameState.value, passwordState.value)).then((res) => {
-      //   console.log(res);
-      //   if(res) {
-      //       authCtx.onSetLogin();
-      //       console.log(authCtx.isLoggedIn);
-      //       router.push("/SelectionScreen");
-      //   } else {
-      //     console.log("Authentication failed, try again.")
-      //   }
-      // });
+      dispatch(onRdxLogin(userNameState.value, passwordState.value)).then((res) => {
+        console.log(res);
+        if(res) {
+            authCtx.onSetLogin();
+            console.log(authCtx.isLoggedIn);
+            router.push("/SelectionScreen");
+        } else {
+          console.log("Authentication failed, try again.")
+        }
+      });
 
       // dispatch(onAuthRdxOptmLogin(userNameState.value, passwordState.value)).then((res) => {
       //   console.log(res);
@@ -112,18 +112,18 @@ export const Login = ({ handleState }) => {
       //   }
       // })
 
-      await authCtx
-        .onLogin(userNameState.value, passwordState.value)
-        .then((res) => {
-          // console.log(res);
-          if (res) {
-            authCtx.onSetLogin();
-            console.log(authCtx.isLoggedIn);
-            router.push("/SelectionScreen");
-          } else {
-            console.log("SOME ISSUE");
-          }
-        });
+      // await authCtx
+      //   .onLogin(userNameState.value, passwordState.value)
+      //   .then((res) => {
+      //     // console.log(res);
+      //     if (res) {
+      //       authCtx.onSetLogin();
+      //       console.log(authCtx.isLoggedIn);
+      //       router.push("/SelectionScreen");
+      //     } else {
+      //       console.log("SOME ISSUE");
+      //     }
+      //   });
     } else {
       alert(
         "Please check your email and password.\n(Email should only be BU email)"

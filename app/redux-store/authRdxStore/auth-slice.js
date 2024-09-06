@@ -23,6 +23,17 @@ const authSlice = createSlice({
         console.log("RDX ON LOGOUT");
         state.isLoggedIn = false
         state.user = {}
+
+        state.newUserState = {}
+
+        state.tempToken = {}
+
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("userDetails");
+
+        window.location.href = "/";
+
+        
     },
 
     rdxSavingSignUpInfo(state, action) {

@@ -62,6 +62,11 @@ export const Navbar = () => {
   useEffect(() => {
     console.log(rdxUser);
 
+    // console.log(authCtx.isLoggedIn);
+    if(rdxIsLoggedIn) {
+      setIsLoggedIn(true);
+      setUser(rdxUser);
+    }
 
     // if (authCtx.isLoggedIn && authCtx.user) {
     //   setUser(authCtx.user);
@@ -75,8 +80,13 @@ export const Navbar = () => {
     if(rdxIsLoggedIn) {
       router.replace("/SelectionScreen");
     } else {
-      router.push("/");
+      window.location.href = "/";
     }
+    // if(rdxIsLoggedIn) {
+    //   router.replace("/SelectionScreen");
+    // } else {
+    //   router.push("/");
+    // }
     // if (authCtx.isLoggedIn) {
     //   // router.push("SelectionScreen");
     //   router.replace("/SelectionScreen");
@@ -89,9 +99,14 @@ export const Navbar = () => {
     if(rdxIsLoggedIn) {
       router.replace("/Reports");
     } else {
-      // router.push("/");
-      redirect("/");
+      window.location.href = "/";
     }
+    // if(rdxIsLoggedIn) {
+    //   router.replace("/Reports");
+    // } else {
+    //   // router.push("/");
+    //   redirect("/");
+    // }
 
     // if (authCtx.isLoggedIn) {
     //   setMenuActive(false);
@@ -105,7 +120,7 @@ export const Navbar = () => {
 
   const logginOut = () => {
     dispatch(authActions.rdxLogoutUser())
-    authCtx.onLogout();
+    // authCtx.onLogout();
     // setIsLoggedIn(false);
     // setMenuActive(false);
     router.push("/");
@@ -115,11 +130,16 @@ export const Navbar = () => {
     console.log("IMAGE CLICK")
     if(rdxIsLoggedIn) {
       router.push("/SelectionScreen");
-      // return;
     } else {
-      router.push("/");
-      // return;
+      window.location.href = "/";
     }
+    // if(rdxIsLoggedIn) {
+    //   router.push("/SelectionScreen");
+    //   // return;
+    // } else {
+    //   router.push("/");
+    //   // return;
+    // }
 
     // if (authCtx.isLoggedIn) {
     //   router.push("/SelectionScreen");
@@ -148,13 +168,14 @@ export const Navbar = () => {
           >
             <div className={`dropDown ${isMenuActive ? "active" : "inactive"}`}>
               <div className="menuStyle">
-                {rdxUser && (
+                {rdxIsLoggedIn && (
                   <div className="Dropdownlabel">
-                    {/* {user.firstName + " " + user.lastName} */}
+                    {/* {rdxUser.firstName + " " + rdxUser.lastName} */}
                   </div>
                 )}
                 <div className="Dropdownlabel">
                   {rdxUser.firstName + " " + rdxUser.lastName}
+                  {/* {authCtx.user.firstName + " " + authCtx.user.lastName} */}
                 </div>
                 {/* <button onClick={profileRoute} className="ProfileBtn">
                 Profile
