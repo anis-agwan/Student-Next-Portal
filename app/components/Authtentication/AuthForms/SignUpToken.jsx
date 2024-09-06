@@ -9,6 +9,7 @@ import { USER_ROLE } from "@/app/enums/role_enums";
 import { TOKEN_ENUMS } from "@/app/enums/token_enums";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthRdxConfirmToken, onAuthRdxOptmSignUp } from "@/app/redux-store/optimizedApis/auth-optm-action";
+import { onRdxConfirmToken } from "@/app/redux-store/authRdxStore/auth-actions";
 
 export const SignUpToken = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
@@ -56,11 +57,19 @@ export const SignUpToken = ({ handleState }) => {
       
       const confirmTokenRequest = {
         emailId: newUserState.emailId,
-        token: tokenState.value
+        token: tokenState.value,
+        requestType: "Register",
       }
 
       console.log(confirmTokenRequest);
 
+      dispatch(
+        onRdxConfirmToken(
+          confirmTokenRequest
+        )
+      ).then((res) => {
+        console.log(res);
+      })
 
       // await dispatch(
       //    onAuthRdxConfirmToken(confirmTokenRequest)
@@ -98,35 +107,35 @@ export const SignUpToken = ({ handleState }) => {
       // }).catch((err) => {
       //   console.log(err);
       // })
-      authCtx
-        .onTokenSubmit(
-          studentData.emailId,
-          tokenState.value,
-          TOKEN_ENUMS.REGISTER
-        )
-        .then((res) => {
-          console.log(res);
-          if (res) {
-            authCtx
-              .onSignup(
-                studentData.emailId,
-                studentData.bingNumber,
-                studentData.firstName,
-                studentData.lastName,
-                studentData.password,
-                USER_ROLE.STUDENT
-              )
-              .then((res) => {
-                if(res) {
-                  alert("Successfully registered");
-                  handleState(AUTHSTATE.LOGIN);
-                } else {
-                  alert("Error : Email / B-Number already exists")
-                  handleState(AUTHSTATE.SIGNUP);
-                }
-              });
-          }
-        });
+      // authCtx
+      //   .onTokenSubmit(
+      //     studentData.emailId,
+      //     tokenState.value,
+      //     TOKEN_ENUMS.REGISTER
+      //   )
+      //   .then((res) => {
+      //     console.log(res);
+      //     if (res) {
+      //       authCtx
+      //         .onSignup(
+      //           studentData.emailId,
+      //           studentData.bingNumber,
+      //           studentData.firstName,
+      //           studentData.lastName,
+      //           studentData.password,
+      //           USER_ROLE.STUDENT
+      //         )
+      //         .then((res) => {
+      //           if(res) {
+      //             alert("Successfully registered");
+      //             handleState(AUTHSTATE.LOGIN);
+      //           } else {
+      //             alert("Error : Email / B-Number already exists")
+      //             handleState(AUTHSTATE.SIGNUP);
+      //           }
+      //         });
+      //     }
+      //   });
     }
   };
 

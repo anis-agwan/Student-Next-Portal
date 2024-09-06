@@ -16,6 +16,10 @@ export const BASEURL = {
     BASE_ENDPOINT: "login-register",
     LOGIN: "login/verify-user",
     REGISTER: "register/user",
+    GENERATESIGNUPTOKEN: "register/generatetoken",
+    GENERATELOGINTOKEN: "login/generatetoken",
+    CONFIRMSIGNUPTOKEN: "register/confirmtoken",
+    CONFIRMLOGINTOKEN: "login/confirmtoken",
   }
 
   export const PB_ENDPOINTS = {

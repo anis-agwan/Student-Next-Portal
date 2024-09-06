@@ -25,6 +25,7 @@ import { AuthContext } from "@/app/store/auth-context";
 import { useDispatch } from "react-redux";
 import { authActions } from "@/app/redux-store/authRdxStore/auth-slice";
 import { onAuthRdxGenToken } from "@/app/redux-store/optimizedApis/auth-optm-action";
+import { onRdxGenToken } from "@/app/redux-store/authRdxStore/auth-actions";
 
 export const Signup = ({ handleState, passStudentInfo }) => {
   const authCtx = useContext(AuthContext);
@@ -192,9 +193,24 @@ export const Signup = ({ handleState, passStudentInfo }) => {
     if (formIsValid) {
       authCtx.passStudentData(user);
 
-      // dispatch(authActions.rdxSavingSignUpInfo({
-      //   newUser: user
-      // }))
+      dispatch(authActions.rdxSavingSignUpInfo({
+        newUser: user
+      }))
+
+      dispatch(
+        onRdxGenToken(
+          {
+            email: user.emailId,
+            requestType: "Register"
+          }
+        ) 
+      )
+      .then(() => {
+        alert("A temporary Token has been sent to your BU email address.");
+        handleState(AUTHSTATE.TOKENSIGNUP);
+      }).catch((err) => {
+        console.log(err);
+      })
 
       // await dispatch(
       //     onAuthRdxGenToken(
@@ -210,12 +226,12 @@ export const Signup = ({ handleState, passStudentInfo }) => {
       //   console.log(err);
       // })
 
-      await authCtx
-        .onGenerateToken(userNameState.value, TOKEN_ENUMS.REGISTER)
-        .then(() => {
-          alert("A temporary Token has been sent to your BU email address.");
-          handleState(AUTHSTATE.TOKENSIGNUP);
-        });
+      // await authCtx
+      //   .onGenerateToken(userNameState.value, TOKEN_ENUMS.REGISTER)
+      //   .then(() => {
+      //     alert("A temporary Token has been sent to your BU email address.");
+      //     handleState(AUTHSTATE.TOKENSIGNUP);
+      //   });
 
       
     }

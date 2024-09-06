@@ -1,5 +1,6 @@
 import { AUTH_ENDPOINTS, BASEURL, URLPORT } from "@/app/enums/url_enums"
 import { authActions } from "./auth-slice"
+import { TOKEN_ENUMS } from "@/app/enums/token_enums"
 
 
 export const onRdxLogin = (email, password) => {
@@ -116,4 +117,112 @@ export const onRdxSignUp = (
           }
     }
         
+}
+
+export const onRdxGenToken = (tokenRequest) => {
+  return async () => {
+      console.log(tokenRequest);
+      let url = "";
+      if(tokenRequest.requestType === "Register") {
+        url = `${BASEURL.AUTH}:${URLPORT.AUTH}/${AUTH_ENDPOINTS.BASE_ENDPOINT}/${AUTH_ENDPOINTS.GENERATESIGNUPTOKEN}`
+      } else {
+        url = `${BASEURL.AUTH}:${URLPORT.AUTH}/${AUTH_ENDPOINTS.BASE_ENDPOINT}/${AUTH_ENDPOINTS.GENERATELOGINTOKEN}`
+      }
+
+      const user = {
+        email: tokenRequest.email,
+      };
+
+      let token = "";
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(user),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(res);
+
+        await res
+        .text()
+        .then((body) => {
+          console.log(body);
+          if (
+            body === "No Such email found" ||
+            body === "User already exists"
+          ) {
+            throw new Error(body);
+          } else {
+            // console.log(res.data);
+            token = body;
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+          
+      } catch(err) {
+          console.log(err);
+          alert(err);
+          throw new Error(err);
+      }
+
+      return token;
+  }
+}
+
+export const onRdxConfirmToken = (tokenRequest) => {
+  return async () => {
+    console.log(tokenRequest);
+    let url = "";
+    if(tokenRequest.requestType === "Register") {
+      url = `${BASEURL.AUTH}:${URLPORT.AUTH}/${AUTH_ENDPOINTS.BASE_ENDPOINT}/${AUTH_ENDPOINTS.CONFIRMSIGNUPTOKEN}`
+    } else {
+      url = `${BASEURL.AUTH}:${URLPORT.AUTH}/${AUTH_ENDPOINTS.BASE_ENDPOINT}/${AUTH_ENDPOINTS.CONFIRMLOGINTOKEN}`
+    }
+      
+    const user = {
+      email: tokenRequest.emailId,
+      token: tokenRequest.token
+    };
+
+    console.log(user);
+
+    let tokenAuthValid = false;
+
+    console.log(url);
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = res.json();
+
+      await data
+        .then((resp) => {
+          if (resp.isValid) {
+            tokenAuthValid = resp.isValid;
+
+            return tokenAuthValid;
+          } else {
+            throw new Error(resp.message);
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } catch (err) {
+      console.log(err);
+      alert(err);
+    }
+
+    return tokenAuthValid;
+
+  }
 }
