@@ -9,7 +9,7 @@ import { USER_ROLE } from "@/app/enums/role_enums";
 import { TOKEN_ENUMS } from "@/app/enums/token_enums";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthRdxConfirmToken, onAuthRdxOptmSignUp } from "@/app/redux-store/optimizedApis/auth-optm-action";
-import { onRdxConfirmToken } from "@/app/redux-store/authRdxStore/auth-actions";
+import { onRdxConfirmToken, onRdxSignUp } from "@/app/redux-store/authRdxStore/auth-actions";
 
 export const SignUpToken = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
@@ -67,8 +67,37 @@ export const SignUpToken = ({ handleState }) => {
         onRdxConfirmToken(
           confirmTokenRequest
         )
-      ).then((res) => {
+      ).then(async (res) => {
         console.log(res);
+        if(res) {
+          console.log("CAN SiGNUP");
+          const signUpUser = {
+            
+          }
+          console.log(signUpUser);
+          await dispatch(
+            onRdxSignUp(
+              newUserState.emailId,
+              newUserState.bingNumber,
+              newUserState.firstName,
+              newUserState.lastName,
+              newUserState.password,
+              USER_ROLE.STUDENT
+            )
+          ).then((res) => {
+            if(res) {
+              console.log("SIGNUP SUCCESSFUL");
+              alert("Account created successfully, please login");
+              handleState(AUTHSTATE.LOGIN);
+            } else {
+              throw new Error("Some issue while creating the account");
+            }
+          }).catch((err) => {
+            console.log(err);
+            // alert(err.message);
+            // handleState(AUTHSTATE.SIGNUP);
+          })
+        }
       })
 
       // await dispatch(

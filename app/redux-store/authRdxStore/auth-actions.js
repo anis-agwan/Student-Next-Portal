@@ -1,6 +1,7 @@
 import { AUTH_ENDPOINTS, BASEURL, URLPORT } from "@/app/enums/url_enums"
 import { authActions } from "./auth-slice"
 import { TOKEN_ENUMS } from "@/app/enums/token_enums"
+import { USER_ROLE } from "@/app/enums/role_enums"
 
 
 export const onRdxLogin = (email, password) => {
@@ -81,7 +82,7 @@ export const onRdxSignUp = (
             console.log("STUD Auth");
             url = url + `?role=${USER_ROLE.STUDENT}`;
         }
-
+        let islog = false;
         const user = {
             emailId: userName,
             bingNumber: bNum,
@@ -101,13 +102,18 @@ export const onRdxSignUp = (
       
             console.log(res);
       
-            res.text().then((body) => {
+            await res.text().then((body) => {
               console.log(body);
-              if (body === "No Such email found" || body === "User already exists") {
-                throw new Error(body);
+              if (body === "Error : Email / B-Number already exists" 
+                || body === "No Such email found" || body === "User already exists"
+              ) {
+                islog = false;
+                alert(body);
+                return islog;
               } else {
-                // console.log(res.data);
+                console.log(res);
                 islog = true;
+                return islog;
               }
             });
           } catch (err) {
@@ -115,6 +121,8 @@ export const onRdxSignUp = (
             alert(err);
             islog = false;
           }
+          console.log(islog);
+          return islog;
     }
         
 }
