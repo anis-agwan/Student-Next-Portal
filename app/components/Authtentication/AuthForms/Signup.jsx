@@ -205,9 +205,13 @@ export const Signup = ({ handleState, passStudentInfo }) => {
           }
         ) 
       )
-      .then(() => {
-        alert("A temporary Token has been sent to your BU email address.");
-        handleState(AUTHSTATE.TOKENSIGNUP);
+      .then((res) => {
+        console.log(res);
+        if(res) {
+          alert("A temporary Token has been sent to your BU email address.");
+          handleState(AUTHSTATE.TOKENSIGNUP);
+        }
+        
       }).catch((err) => {
         console.log(err);
       })

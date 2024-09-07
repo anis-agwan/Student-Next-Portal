@@ -95,7 +95,7 @@ export const SignUpToken = ({ handleState }) => {
           }).catch((err) => {
             console.log(err);
             // alert(err.message);
-            // handleState(AUTHSTATE.SIGNUP);
+            handleState(AUTHSTATE.SIGNUP);
           })
         }
       })

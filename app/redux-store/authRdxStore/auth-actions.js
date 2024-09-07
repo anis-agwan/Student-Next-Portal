@@ -142,6 +142,7 @@ export const onRdxGenToken = (tokenRequest) => {
       };
 
       let token = "";
+      let notError = false;
 
       try {
         const res = await fetch(url, {
@@ -161,23 +162,28 @@ export const onRdxGenToken = (tokenRequest) => {
             body === "No Such email found" ||
             body === "User already exists"
           ) {
+            notError = false;
+            console.log(body);
             throw new Error(body);
           } else {
             // console.log(res.data);
             token = body;
+            notError = true;
           }
         })
         .catch((err) => {
+          notError=false;
           alert(err);
         });
           
       } catch(err) {
           console.log(err);
+          notError=false;
           alert(err);
           throw new Error(err);
       }
 
-      return token;
+      return notError;
   }
 }
 
