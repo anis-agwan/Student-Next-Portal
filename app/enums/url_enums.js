@@ -20,6 +20,7 @@ export const BASEURL = {
     GENERATELOGINTOKEN: "login/generatetoken",
     CONFIRMSIGNUPTOKEN: "register/confirmtoken",
     CONFIRMLOGINTOKEN: "login/confirmtoken",
+    CHANGEPASSWORD: "login/newPassword"
   }
 
   export const PB_ENDPOINTS = {

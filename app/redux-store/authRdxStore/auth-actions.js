@@ -240,3 +240,32 @@ export const onRdxConfirmToken = (tokenRequest) => {
 
   }
 }
+
+export const changePassword = (user) => {
+  return async (dispatch) => {
+    const url = `${BASEURL.AUTH}:${URLPORT.AUTH}/${AUTH_ENDPOINTS.BASE_ENDPOINT}/${AUTH_ENDPOINTS.CHANGEPASSWORD}`;
+    console.log(url);
+    let registeredValid = false;
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res);
+      const data = res.json();
+      await data.then((r) => {
+        alert(r.message);
+      });
+      registeredValid = true;
+      // console.log(data);
+    } catch (err) {
+      registeredValid = false;
+      console.log(err);
+      alert(err);
+    } 
+    return registeredValid;
+  }
+}

@@ -7,9 +7,12 @@ import { AuthContext } from "@/app/store/auth-context";
 import { AUTHSTATE } from "@/app/enums/auth_state";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthRdxNewPassword } from "@/app/redux-store/optimizedApis/auth-optm-action";
+import { changePassword } from "@/app/redux-store/authRdxStore/auth-actions";
 
 export const NewPassForm = ({ handleState }) => {
   const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const forgotUser = useSelector((state) => state.auth.forgotUser);
 
   const [newpassFormIsValid, setNewPassFormIsValid] = useState(false);
 
@@ -22,7 +25,6 @@ export const NewPassForm = ({ handleState }) => {
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
 
   const newTempToken = useSelector((state) => state.auth.tempToken);
-  const dispatch = useDispatch();
 
   const passwordChangehandler = (event) => {
     dispatchPassword({
@@ -59,15 +61,30 @@ export const NewPassForm = ({ handleState }) => {
 
   const onNewPassSubmit = async (event) => {
     event.preventDefault();
-    console.log(newTempToken.tokenState);
+    // console.log(newTempToken.tokenState);
+    // const user = {
+    //   emailId: newTempToken.emailId,
+    //   token: newTempToken.tokenState,
+    //   newPassword: passwordState.value
+    // }
     const user = {
-      emailId: newTempToken.emailId,
-      token: newTempToken.tokenState,
+      email: forgotUser.emailId,
       newPassword: passwordState.value
     }
 
     console.log(user);
-
+    dispatch(changePassword(user)).then((res) => {
+      if(res) {
+        console.log("CHANGED");
+        handleState(AUTHSTATE.LOGIN);
+      } else {
+        throw new Error("Password did not change");
+      }
+    }).catch((err) => {
+      console.log(err);
+      // alert(err);
+    });
+    
     // await dispatch(
     //   onAuthRdxNewPassword(user)
     // ).then((res) => {
@@ -77,18 +94,18 @@ export const NewPassForm = ({ handleState }) => {
     //   }
     // })
     
-    await authCtx
-      .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
-      .then((r) => {
-        if (r === true) {
-          handleState(AUTHSTATE.LOGIN);
-        } else {
-          throw new Error("Password did not change");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // await authCtx
+    //   .onRegisterNewPassword(authCtx.signUpStudentData.emailId, enteredPassword)
+    //   .then((r) => {
+    //     if (r === true) {
+    //       handleState(AUTHSTATE.LOGIN);
+    //     } else {
+    //       throw new Error("Password did not change");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (
